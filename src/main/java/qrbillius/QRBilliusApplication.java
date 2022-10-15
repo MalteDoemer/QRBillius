@@ -9,6 +9,7 @@ import qrbillius.views.ViewController;
 import qrbillius.views.ViewInfo;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class QRBilliusApplication extends Application {
 
@@ -17,16 +18,21 @@ public class QRBilliusApplication extends Application {
 
     private Stage stage;
 
+    private ResourceBundle uiResources;
+
     private ViewInfo mainView;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
 
+        uiResources = loadBundle("UI");
+
         mainView = loadView("main-view.fxml");
 
         stage.setScene(new Scene(mainView.root(), PREF_WIDTH, PREF_HEIGHT));
         stage.getScene().getStylesheets().add(loadStylesheet("style.css"));
+        stage.setTitle(uiResources.getString("title"));
         stage.show();
     }
 
@@ -36,7 +42,7 @@ public class QRBilliusApplication extends Application {
     }
 
     private ViewInfo loadView(String name) throws IOException {
-        var loader = new FXMLLoader(QRBilliusApplication.class.getResource(String.format("views/%s", name)));
+        var loader = new FXMLLoader(QRBilliusApplication.class.getResource(String.format("views/%s", name)), uiResources);
         var root = loader.<Parent>load();
         var controller = loader.<ViewController>getController();
 
@@ -48,6 +54,10 @@ public class QRBilliusApplication extends Application {
         var resource = QRBilliusApplication.class.getResource(String.format("styles/%s", name));
         assert resource != null;
         return resource.toString();
+    }
+
+    private ResourceBundle loadBundle(String name) {
+        return ResourceBundle.getBundle(String.format("qrbillius/bundles/%s", name));
     }
 
     public static void main(String[] args) {
