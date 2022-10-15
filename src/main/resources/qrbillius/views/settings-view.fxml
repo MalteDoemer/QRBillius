@@ -38,7 +38,7 @@
                         </VBox>
                         <VBox spacing="5.0">
                             <Label text="%languageField"/>
-                            <TextField fx:id="languageField"/>
+                            <ChoiceBox fx:id="languageChoiceBox"/>
                         </VBox>
                     </children>
                     <padding>
