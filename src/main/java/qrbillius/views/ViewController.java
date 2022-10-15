@@ -1,9 +1,9 @@
 package qrbillius.views;
 
-import qrbillius.QRBilliusApplication;
+import qrbillius.Application;
 
 public abstract  class ViewController {
-    public abstract void init(QRBilliusApplication app);
+    public abstract void init(Application app);
 
     public abstract void show();
 }

@@ -25,7 +25,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'qrbillius'
-    mainClass = 'qrbillius.QRBilliusApplication'
+    mainClass = 'qrbillius.Application'
 }
 
 javafx {
