@@ -5,6 +5,9 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import net.codecrete.qrbill.generator.Language;
 import qrbillius.Application;
+import qrbillius.errors.ErrorChecker;
+import qrbillius.errors.ErrorConstants;
+import qrbillius.errors.ErrorMessage;
 
 import java.io.IOException;
 
@@ -48,11 +51,18 @@ public class SettingsView extends ViewController {
         settings.setCreditorAddressLine2(addressLine2Field.getText());
         settings.setLanguage(languageChoiceBox.getValue());
 
+        var result = ErrorChecker.checkSettings(settings);
+        if (result.hasErrors()) {
+            app.showErrorResult(result);
+            return;
+        }
+
         try {
             settings.save();
         } catch (IOException e) {
-            // TODO
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            var message = new ErrorMessage(ErrorConstants.IO_ERROR_OCCURRED, e.getLocalizedMessage());
+            app.showErrorMessage(message);
         }
 
         app.switchView(app.getMainView());

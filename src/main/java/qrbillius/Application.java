@@ -3,7 +3,10 @@ package qrbillius;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import qrbillius.errors.ErrorMessage;
+import qrbillius.errors.ErrorResult;
 import qrbillius.views.ViewController;
 import qrbillius.views.ViewInfo;
 
@@ -18,6 +21,7 @@ public class Application extends javafx.application.Application {
     private Stage stage;
 
     private ResourceBundle uiResources;
+    private ResourceBundle errorResources;
 
     private ViewInfo mainView;
 
@@ -25,7 +29,7 @@ public class Application extends javafx.application.Application {
 
     private ViewInfo settingsView;
 
-    private SettingsManager settings = new SettingsManager();
+    private final SettingsManager settings = new SettingsManager();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -34,6 +38,7 @@ public class Application extends javafx.application.Application {
         settings.load();
 
         uiResources = loadBundle("UI");
+        errorResources = loadBundle("ErrorMessages");
 
         mainView = loadView("main-view.fxml");
         addView = loadView("add-view.fxml");
@@ -69,6 +74,37 @@ public class Application extends javafx.application.Application {
         return ResourceBundle.getBundle(String.format("qrbillius/bundles/%s", name));
     }
 
+
+    public void showErrorResult(ErrorResult result) {
+        if (!result.hasErrors())
+            return;
+
+        var messages = result.getErrorMessages();
+
+        if (messages.size() == 1) {
+            showErrorMessage(messages.get(0));
+            return;
+        }
+
+        var builder = new StringBuilder();
+
+        for (var message : messages) {
+            builder.append("- ");
+            builder.append(message.getFormattedMessage(errorResources));
+            builder.append('\n');
+        }
+
+        var dialog = new Alert(Alert.AlertType.ERROR, builder.toString());
+        dialog.initOwner(stage.getOwner());
+        dialog.showAndWait();
+    }
+
+    public void showErrorMessage(ErrorMessage message) {
+        var text = message.getFormattedMessage(errorResources);
+        var dialog = new Alert(Alert.AlertType.ERROR, text);
+        dialog.initOwner(stage.getOwner());
+        dialog.showAndWait();
+    }
 
     public Stage getStage() {
         return stage;

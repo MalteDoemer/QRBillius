@@ -1,7 +1,7 @@
 package qrbillius;
 
 import net.codecrete.qrbill.generator.Language;
-import qrbillius.qrbill.Validator;
+import qrbillius.qrbill.QRBillGenerator;
 
 import java.io.File;
 import java.io.FileReader;
@@ -92,7 +92,7 @@ public class SettingsManager {
     public Language getLanguage() {
         var lang = getProperty(LANGUAGE);
 
-        if (Validator.isValidLanguage(lang)) {
+        if (QRBillGenerator.isValidLanguage(lang)) {
             return Language.valueOf(lang);
         } else {
             setProperty(LANGUAGE, "DE");

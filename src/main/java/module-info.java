@@ -13,6 +13,8 @@ module qrbillius {
     requires org.kordamp.ikonli.fontawesome;
 
 
+    exports qrbillius.errors;
+    exports qrbillius.qrbill;
     exports qrbillius.views;
     opens qrbillius.views to javafx.fxml;
     exports qrbillius;
