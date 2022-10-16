@@ -29,7 +29,7 @@
                 </TableColumn>
                 <TableColumn minWidth="-Infinity" prefWidth="-1.0" text="%paymentAmountField">
                     <cellValueFactory>
-                        <PropertyValueFactory property="paymentAmount"/>
+                        <PropertyValueFactory property="amount"/>
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn minWidth="-Infinity" prefWidth="-1.0" text="%additionalInfoField">

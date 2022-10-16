@@ -2,7 +2,13 @@ package qrbillius.views;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
+import net.codecrete.qrbill.generator.QRBill;
 import qrbillius.Application;
+import qrbillius.errors.ErrorChecker;
+import qrbillius.errors.ErrorConstants;
+import qrbillius.errors.ErrorMessage;
+import qrbillius.qrbill.QRBillGenerator;
+import qrbillius.qrbill.QRBillInfo;
 
 public class AddView extends ViewController {
 
@@ -12,6 +18,7 @@ public class AddView extends ViewController {
     public TextField paymentAmountTextField;
     public TextField additionalInfoTextField;
     private Application app;
+
     @Override
     public void init(Application app) {
         this.app = app;
@@ -20,7 +27,11 @@ public class AddView extends ViewController {
 
     @Override
     public void show() {
-
+        nameTextField.clear();
+        addressLine1TextField.clear();
+        addressLine2TextField.clear();
+        paymentAmountTextField.clear();
+        additionalInfoTextField.clear();
     }
 
     public void onCancelButtonClick(ActionEvent actionEvent) {
@@ -28,5 +39,22 @@ public class AddView extends ViewController {
     }
 
     public void onAddButtonClick(ActionEvent actionEvent) {
+        var billInfo = new QRBillInfo(
+                nameTextField.getText(),
+                addressLine1TextField.getText(),
+                addressLine2TextField.getText(),
+                paymentAmountTextField.getText(),
+                additionalInfoTextField.getText()
+        );
+
+        var result = ErrorChecker.checkBillingInformation(billInfo);
+
+        if (result.hasErrors()) {
+            app.showErrorResult(result);
+            return;
+        }
+
+        app.getBills().add(billInfo);
+        app.switchView(app.getMainView());
     }
 }

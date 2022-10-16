@@ -1,6 +1,7 @@
 package qrbillius.qrbill;
 
-import net.codecrete.qrbill.generator.Language;
+import net.codecrete.qrbill.generator.*;
+import qrbillius.SettingsManager;
 
 import java.math.BigDecimal;
 
@@ -28,6 +29,40 @@ public class QRBillGenerator {
         }
 
         return new BigDecimal(amount);
+    }
+
+    public static Bill createBill(QRBillInfo info, SettingsManager settings) {
+        var bill = new Bill();
+
+        // Creditor
+        bill.setAccount(settings.getCreditorAccount());
+        bill.setCreditor(createAddress(settings.getCreditorName(), settings.getCreditorAddressLine1(), settings.getCreditorAddressLine2()));
+
+        // Bill Format
+        bill.getFormat().setLanguage(settings.getLanguage());
+        bill.getFormat().setGraphicsFormat(GraphicsFormat.PDF);
+        bill.getFormat().setOutputSize(OutputSize.A4_PORTRAIT_SHEET);
+
+        // Amount
+        bill.setAmount(parsePaymentAmount(info.getAmount()));
+        bill.setCurrency("CHF");
+
+        // Debtor
+        bill.setDebtor(createAddress(info.getName(), info.getAddressLine1(), info.getAddressLine2()));
+
+        // Unstructured Message
+        bill.setUnstructuredMessage(info.getAdditionalInfo());
+
+        return bill;
+    }
+
+    public static Address createAddress(String name, String addressLine1, String addressLine2) {
+        var address = new Address();
+        address.setName(name);
+        address.setAddressLine1(addressLine1);
+        address.setAddressLine2(addressLine2);
+        address.setCountryCode("CH");
+        return address;
     }
 
     public static boolean isValidLanguage(String language) {

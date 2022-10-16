@@ -30,9 +30,9 @@ public class ErrorChecker {
     public static ErrorResult checkBillingInformation(QRBillInfo info) {
         var checker = new ErrorChecker();
 
-        checker.checkAddress(info.name(), info.addressLine1(), info.addressLine2());
-        checker.checkPaymentAmount(info.amount());
-        checker.checkAdditionalInfo(info.additionalInfo());
+        checker.checkAddress(info.getName(), info.getAddressLine1(), info.getAddressLine2());
+        checker.checkPaymentAmount(info.getAmount());
+        checker.checkAdditionalInfo(info.getAdditionalInfo());
 
         return checker.getResult();
     }

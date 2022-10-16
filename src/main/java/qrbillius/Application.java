@@ -1,12 +1,16 @@
 package qrbillius;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import net.codecrete.qrbill.generator.Bill;
 import qrbillius.errors.ErrorMessage;
 import qrbillius.errors.ErrorResult;
+import qrbillius.qrbill.QRBillInfo;
 import qrbillius.views.ViewController;
 import qrbillius.views.ViewInfo;
 
@@ -30,6 +34,8 @@ public class Application extends javafx.application.Application {
     private ViewInfo settingsView;
 
     private final SettingsManager settings = new SettingsManager();
+
+    private final ObservableList<QRBillInfo> bills = FXCollections.observableArrayList();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -74,7 +80,6 @@ public class Application extends javafx.application.Application {
         return ResourceBundle.getBundle(String.format("qrbillius/bundles/%s", name));
     }
 
-
     public void showErrorResult(ErrorResult result) {
         if (!result.hasErrors())
             return;
@@ -114,6 +119,10 @@ public class Application extends javafx.application.Application {
         return uiResources;
     }
 
+    public ResourceBundle getErrorResources() {
+        return errorResources;
+    }
+
     public ViewInfo getMainView() {
         return mainView;
     }
@@ -128,6 +137,10 @@ public class Application extends javafx.application.Application {
 
     public SettingsManager getSettings() {
         return settings;
+    }
+
+    public ObservableList<QRBillInfo> getBills() {
+        return bills;
     }
 
     public static void main(String[] args) {
