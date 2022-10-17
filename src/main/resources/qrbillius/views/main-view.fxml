@@ -76,7 +76,7 @@
                         <FontIcon disable="true" iconLiteral="fa-minus-circle" iconSize="32"/>
                     </graphic>
                 </Button>
-                <Button fx:id="createPDFButton" mnemonicParsing="false" onAction="#onCreatePDFButtonClick">
+                <Button fx:id="exportButton" mnemonicParsing="false" onAction="#onExportButtonClick">
                     <tooltip>
                         <Tooltip text="%saveTooltip"/>
                     </tooltip>

@@ -4,6 +4,8 @@ import net.codecrete.qrbill.generator.*;
 import qrbillius.SettingsManager;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QRBillGenerator {
 
@@ -31,7 +33,17 @@ public class QRBillGenerator {
         return new BigDecimal(amount);
     }
 
-    public static Bill createBill(QRBillInfo info, SettingsManager settings) {
+    public static List<Bill> createBills(List<QRBillInfo> infos, SettingsManager settings, GraphicsFormat format, OutputSize outputSize) {
+        var res = new ArrayList<Bill>();
+
+        for (var info : infos) {
+            res.add(createBill(info, settings, format, outputSize));
+        }
+
+        return res;
+    }
+
+    public static Bill createBill(QRBillInfo info, SettingsManager settings, GraphicsFormat format, OutputSize outputSize) {
         var bill = new Bill();
 
         // Creditor
@@ -40,8 +52,8 @@ public class QRBillGenerator {
 
         // Bill Format
         bill.getFormat().setLanguage(settings.getLanguage());
-        bill.getFormat().setGraphicsFormat(GraphicsFormat.PDF);
-        bill.getFormat().setOutputSize(OutputSize.A4_PORTRAIT_SHEET);
+        bill.getFormat().setGraphicsFormat(format);
+        bill.getFormat().setOutputSize(outputSize);
 
         // Amount
         bill.setAmount(parsePaymentAmount(info.getAmount()));

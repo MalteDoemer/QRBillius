@@ -1,20 +1,24 @@
 package qrbillius.views;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
-import net.codecrete.qrbill.generator.Bill;
+import javafx.stage.FileChooser;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import qrbillius.Application;
-import qrbillius.qrbill.QRBillInfo;
+import qrbillius.errors.ErrorConstants;
+import qrbillius.errors.ErrorMessage;
+import qrbillius.qrbill.*;
+
+import java.io.File;
+import java.io.IOException;
 
 public class MainView extends ViewController {
 
     public Button removeButton;
-    public Button createPDFButton;
+    public Button exportButton;
     public TableView<QRBillInfo> tableView;
     private Application app;
 
@@ -41,7 +45,7 @@ public class MainView extends ViewController {
         });
 
         var isEmpty = app.getBills().size() == 0;
-        createPDFButton.setDisable(isEmpty);
+        exportButton.setDisable(isEmpty);
     }
 
 
@@ -52,7 +56,7 @@ public class MainView extends ViewController {
 
     private void onItemsChange(ListChangeListener.Change<? extends QRBillInfo> change) {
         // Disable PDF creation if there are no bills
-        createPDFButton.setDisable(app.getBills().size() == 0);
+        exportButton.setDisable(app.getBills().size() == 0);
     }
 
     private void onSelectionChange(ListChangeListener.Change<? extends QRBillInfo> change) {
@@ -71,10 +75,48 @@ public class MainView extends ViewController {
         app.getBills().removeAll(tableView.getSelectionModel().getSelectedItems());
     }
 
-    public void onCreatePDFButtonClick(ActionEvent actionEvent) {
+    public void onExportButtonClick(ActionEvent actionEvent) {
+        var chooser = new FileChooser();
+
+        chooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PDF", "*.pdf", "*.PDF"),
+                new FileChooser.ExtensionFilter("DOCX", "*.docx", "*.DOCX")
+        );
+
+        var file = chooser.showSaveDialog(app.getStage());
+
+        // file == null means that the user canceled the selection
+        if (file == null)
+            return;
+
+        var ext = FilenameUtils.getExtension(file.getName());
+
+        var exporter = createExporter(ext);
+
+        try {
+            exporter.export(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            var message = new ErrorMessage(ErrorConstants.IO_ERROR_OCCURRED, e.getLocalizedMessage());
+            app.showErrorMessage(message);
+        }
     }
 
     public void onSettingsButtonClick(ActionEvent actionEvent) {
         app.switchView(app.getSettingsView());
+    }
+
+
+    private AbstractExporter createExporter(String ext) {
+        if ("docx".compareToIgnoreCase(ext) == 0) {
+            return new DocxExporter(app.getBills(), app.getSettings());
+        } else if ("pdf".compareToIgnoreCase(ext) == 0) {
+            return new PdfExporter(app.getBills(), app.getSettings());
+        } else {
+            // since the file chooser only allows .pdf and .docx this
+            // branch should never be reached.
+            throw new RuntimeException("unsupported format");
+        }
+
     }
 }
