@@ -36,7 +36,6 @@ dependencies {
     implementation 'org.docx4j:docx4j-JAXB-ReferenceImpl:11.4.8'
     implementation 'org.docx4j:docx4j-docx-anon:11.4.8'
     implementation 'xerces:xercesImpl:2.12.2'
-    implementation 'ch.qos.logback:logback-classic:1.4.4'
 
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
     implementation 'com.sun.xml.bind:jaxb-core:4.0.1'
