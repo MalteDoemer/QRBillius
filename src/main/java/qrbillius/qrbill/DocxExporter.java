@@ -12,8 +12,8 @@ import java.util.List;
 
 public class DocxExporter extends AbstractExporter {
 
-    public DocxExporter(List<QRBillInfo> bills, SettingsManager settings) {
-        super(bills, settings);
+    public DocxExporter(List<QRBillInfo> bills, QRBillConfig config) {
+        super(bills, config);
     }
 
     @Override

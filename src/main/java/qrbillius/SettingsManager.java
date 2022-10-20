@@ -1,6 +1,7 @@
 package qrbillius;
 
 import net.codecrete.qrbill.generator.Language;
+import qrbillius.qrbill.QRBillConfig;
 import qrbillius.qrbill.QRBillGenerator;
 
 import java.io.File;
@@ -102,6 +103,12 @@ public class SettingsManager {
 
     public void setLanguage(Language language) {
         setProperty(LANGUAGE, language.toString());
+    }
+
+    public QRBillConfig getQRBillConfig() {
+        var account = getCreditorAccount();
+        var address = QRBillGenerator.createAddress(getCreditorName(), getCreditorAddressLine1(), getCreditorAddressLine2());
+        return new QRBillConfig(account, address, getLanguage());
     }
 
     private File getConfigFile() throws IOException {

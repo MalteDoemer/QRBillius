@@ -9,11 +9,11 @@ import java.util.List;
 
 public abstract class AbstractExporter {
     protected List<QRBillInfo> bills;
-    protected SettingsManager settings;
+    protected QRBillConfig config;
 
-    public AbstractExporter(List<QRBillInfo> bills, SettingsManager settings) {
+    public AbstractExporter(List<QRBillInfo> bills, QRBillConfig config) {
         this.bills = bills;
-        this.settings = settings;
+        this.config = config;
     }
 
     public abstract void export(File file) throws IOException;

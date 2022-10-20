@@ -33,25 +33,25 @@ public class QRBillGenerator {
         return new BigDecimal(amount);
     }
 
-    public static List<Bill> createBills(List<QRBillInfo> infos, SettingsManager settings, GraphicsFormat format, OutputSize outputSize) {
+    public static List<Bill> createBills(List<QRBillInfo> infos, QRBillConfig config, GraphicsFormat format, OutputSize outputSize) {
         var res = new ArrayList<Bill>();
 
         for (var info : infos) {
-            res.add(createBill(info, settings, format, outputSize));
+            res.add(createBill(info, config, format, outputSize));
         }
 
         return res;
     }
 
-    public static Bill createBill(QRBillInfo info, SettingsManager settings, GraphicsFormat format, OutputSize outputSize) {
+    public static Bill createBill(QRBillInfo info, QRBillConfig config, GraphicsFormat format, OutputSize outputSize) {
         var bill = new Bill();
 
         // Creditor
-        bill.setAccount(settings.getCreditorAccount());
-        bill.setCreditor(createAddress(settings.getCreditorName(), settings.getCreditorAddressLine1(), settings.getCreditorAddressLine2()));
+        bill.setAccount(config.account());
+        bill.setCreditor(config.address());
 
         // Bill Format
-        bill.getFormat().setLanguage(settings.getLanguage());
+        bill.getFormat().setLanguage(config.language());
         bill.getFormat().setGraphicsFormat(format);
         bill.getFormat().setOutputSize(outputSize);
 

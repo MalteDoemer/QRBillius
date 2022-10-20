@@ -108,10 +108,12 @@ public class MainView extends ViewController {
 
 
     private AbstractExporter createExporter(String ext) {
+        var settings = app.getSettings();
+
         if ("docx".compareToIgnoreCase(ext) == 0) {
-            return new DocxExporter(app.getBills(), app.getSettings());
+            return new DocxExporter(app.getBills(), settings.getQRBillConfig());
         } else if ("pdf".compareToIgnoreCase(ext) == 0) {
-            return new PdfExporter(app.getBills(), app.getSettings());
+            return new PdfExporter(app.getBills(), settings.getQRBillConfig());
         } else {
             // since the file chooser only allows .pdf and .docx this
             // branch should never be reached.
