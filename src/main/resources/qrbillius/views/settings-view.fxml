@@ -40,6 +40,31 @@
                             <Label text="%languageField"/>
                             <ChoiceBox fx:id="languageChoiceBox"/>
                         </VBox>
+                        <Label styleClass="header-label" text="%importSettingsHeader" />
+                        <VBox spacing="5.0">
+                            <Label text="%csvSeparatorField"/>
+                            <TextField fx:id="csvSeparatorField"/>
+                        </VBox>
+                        <VBox spacing="5.0">
+                            <Label text="%importNameFormatField"/>
+                            <TextField fx:id="importNameFormatField"/>
+                        </VBox>
+                        <VBox spacing="5.0">
+                            <Label text="%importAddressLine1FormatField"/>
+                            <TextField fx:id="importAddressLine1FormatField"/>
+                        </VBox>
+                        <VBox spacing="5.0">
+                            <Label text="%importAddressLine2FormatField"/>
+                            <TextField fx:id="importAddressLine2FormatField"/>
+                        </VBox>
+                        <VBox spacing="5.0">
+                            <Label text="%importPaymentAmountFormatField"/>
+                            <TextField fx:id="importPaymentAmountFormatField"/>
+                        </VBox>
+                        <VBox spacing="5.0">
+                            <Label text="%importAdditionalInfoFormatField"/>
+                            <TextField fx:id="importAdditionalInfoFormatField"/>
+                        </VBox>
                     </children>
                     <padding>
                         <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>

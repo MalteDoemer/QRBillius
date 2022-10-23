@@ -18,6 +18,12 @@ public class SettingsView extends ViewController {
     public TextField addressLine1Field;
     public TextField addressLine2Field;
     public ChoiceBox<Language> languageChoiceBox;
+    public TextField csvSeparatorField;
+    public TextField importNameFormatField;
+    public TextField importAddressLine1FormatField;
+    public TextField importAddressLine2FormatField;
+    public TextField importPaymentAmountFormatField;
+    public TextField importAdditionalInfoFormatField;
     private Application app;
 
     @Override
