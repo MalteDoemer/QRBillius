@@ -5,14 +5,12 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import qrbillius.Application;
 import qrbillius.errors.ErrorConstants;
 import qrbillius.errors.ErrorMessage;
 import qrbillius.qrbill.*;
 
-import java.io.File;
 import java.io.IOException;
 
 public class MainView extends ViewController {
@@ -50,7 +48,7 @@ public class MainView extends ViewController {
 
 
     @Override
-    public void show() {
+    public void show(Object arg) {
 
     }
 
@@ -65,6 +63,31 @@ public class MainView extends ViewController {
     }
 
     public void onOpenButtonClick(ActionEvent event) {
+
+        var chooser = new FileChooser();
+
+        chooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter(app.getUiResources().getString("allFileExtensions"), "*.csv", "*.xlsx"),
+                new FileChooser.ExtensionFilter("CSV", "*.csv"),
+                new FileChooser.ExtensionFilter("Excel", "*.xlsx")
+        );
+
+        var file = chooser.showOpenDialog(app.getStage());
+
+        // file == null means that the user canceled the selection
+        if (file == null)
+            return;
+
+        var ext = FilenameUtils.getExtension(file.getName());
+
+        var view = getImportView(ext);
+
+        if (view != null) {
+            app.switchView(view, file.getAbsolutePath());
+        } else {
+            var error = new ErrorMessage(ErrorConstants.UNSUPPORTED_FILE_EXTENSION, ext);
+            app.showErrorMessage(error);
+        }
     }
 
     public void onAddButtonClick(ActionEvent actionEvent) {
@@ -79,8 +102,9 @@ public class MainView extends ViewController {
         var chooser = new FileChooser();
 
         chooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PDF", "*.pdf", "*.PDF"),
-                new FileChooser.ExtensionFilter("DOCX", "*.docx", "*.DOCX")
+                new FileChooser.ExtensionFilter(app.getUiResources().getString("allFileExtensions"), "*.pdf", "*.docx"),
+                new FileChooser.ExtensionFilter("PDF", "*.pdf"),
+                new FileChooser.ExtensionFilter("Word", "*.docx")
         );
 
         var file = chooser.showSaveDialog(app.getStage());
@@ -91,14 +115,13 @@ public class MainView extends ViewController {
 
         var ext = FilenameUtils.getExtension(file.getName());
 
-        var exporter = createExporter(ext);
+        var view = getExportView(ext);
 
-        try {
-            exporter.export(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-            var message = new ErrorMessage(ErrorConstants.IO_ERROR_OCCURRED, e.getLocalizedMessage());
-            app.showErrorMessage(message);
+        if (view != null) {
+            app.switchView(view, file.getAbsolutePath());
+        } else {
+            var error = new ErrorMessage(ErrorConstants.UNSUPPORTED_FILE_EXTENSION, ext);
+            app.showErrorMessage(error);
         }
     }
 
@@ -106,19 +129,23 @@ public class MainView extends ViewController {
         app.switchView(app.getSettingsView());
     }
 
-
-    private AbstractExporter createExporter(String ext) {
-        var settings = app.getSettings();
-
-        if ("docx".compareToIgnoreCase(ext) == 0) {
-            return new DocxExporter(app.getBills(), settings.getQRBillConfig());
-        } else if ("pdf".compareToIgnoreCase(ext) == 0) {
-            return new PdfExporter(app.getBills(), settings.getQRBillConfig());
+    private ViewInfo getExportView(String fileExtension) {
+        if (fileExtension.compareToIgnoreCase("pdf") == 0) {
+            return app.getCsvImportView();
+        } else if (fileExtension.compareToIgnoreCase("docx") == 0) {
+            return app.getXlsxImportView();
         } else {
-            // since the file chooser only allows .pdf and .docx this
-            // branch should never be reached.
-            throw new RuntimeException("unsupported format");
+            return null;
         }
+    }
 
+    private ViewInfo getImportView(String fileExtension) {
+        if (fileExtension.compareToIgnoreCase("csv") == 0) {
+            return app.getCsvImportView();
+        } else if (fileExtension.compareToIgnoreCase("xlsx") == 0) {
+            return app.getXlsxImportView();
+        } else {
+            return null;
+        }
     }
 }

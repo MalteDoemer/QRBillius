@@ -34,4 +34,6 @@ public class ErrorConstants {
     public static final String ADDRESS_LINE2_MISSING = "addressLine2Missing";
 
     public static final String LANGUAGE_INVALID = "languageInvalid";
+
+    public static final String UNSUPPORTED_FILE_EXTENSION = "unsupportedFileExtension";
 }

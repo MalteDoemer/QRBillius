@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import net.codecrete.qrbill.generator.Bill;
 import qrbillius.errors.ErrorMessage;
 import qrbillius.errors.ErrorResult;
 import qrbillius.qrbill.QRBillInfo;
@@ -31,6 +30,14 @@ public class Application extends javafx.application.Application {
 
     private ViewInfo addView;
 
+    private ViewInfo csvImportView;
+
+    private ViewInfo xlsxImportView;
+
+    private ViewInfo pdfExportView;
+
+    private ViewInfo docxExportView;
+
     private ViewInfo settingsView;
 
     private final SettingsManager settings = new SettingsManager();
@@ -48,6 +55,10 @@ public class Application extends javafx.application.Application {
 
         mainView = loadView("main-view.fxml");
         addView = loadView("add-view.fxml");
+        csvImportView = loadView("csv-import-view.fxml");
+        xlsxImportView = loadView("xlsx-import-view.fxml");
+        pdfExportView = loadView("pdf-export-view.fxml");
+        docxExportView = loadView("docx-export-view.fxml");
         settingsView = loadView("settings-view.fxml");
 
         stage.setScene(new Scene(mainView.root(), PREF_WIDTH, PREF_HEIGHT));
@@ -57,7 +68,12 @@ public class Application extends javafx.application.Application {
     }
 
     public void switchView(ViewInfo view) {
-        view.controller().show();
+        view.controller().show(null);
+        stage.getScene().setRoot(view.root());
+    }
+
+    public void switchView(ViewInfo view, Object arg) {
+        view.controller().show(arg);
         stage.getScene().setRoot(view.root());
     }
 
@@ -129,6 +145,22 @@ public class Application extends javafx.application.Application {
 
     public ViewInfo getAddView() {
         return addView;
+    }
+
+    public ViewInfo getCsvImportView() {
+        return csvImportView;
+    }
+
+    public ViewInfo getXlsxImportView() {
+        return xlsxImportView;
+    }
+
+    public ViewInfo getPdfExportView() {
+        return pdfExportView;
+    }
+
+    public ViewInfo getDocxExportView() {
+        return docxExportView;
     }
 
     public ViewInfo getSettingsView() {

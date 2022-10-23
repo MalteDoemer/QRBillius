@@ -2,12 +2,8 @@ package qrbillius.views;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
-import net.codecrete.qrbill.generator.QRBill;
 import qrbillius.Application;
 import qrbillius.errors.ErrorChecker;
-import qrbillius.errors.ErrorConstants;
-import qrbillius.errors.ErrorMessage;
-import qrbillius.qrbill.QRBillGenerator;
 import qrbillius.qrbill.QRBillInfo;
 
 public class AddView extends ViewController {
@@ -26,7 +22,7 @@ public class AddView extends ViewController {
     }
 
     @Override
-    public void show() {
+    public void show(Object arg) {
         nameTextField.clear();
         addressLine1TextField.clear();
         addressLine2TextField.clear();

@@ -28,7 +28,7 @@ public class SettingsView extends ViewController {
     }
 
     @Override
-    public void show() {
+    public void show(Object arg) {
         var settings = app.getSettings();
 
         accountField.setText(settings.getCreditorAccount());
