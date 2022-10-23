@@ -1,7 +1,7 @@
 package qrbillius.errors;
 
 import net.codecrete.qrbill.generator.*;
-import qrbillius.SettingsManager;
+import qrbillius.Settings;
 import qrbillius.qrbill.QRBillGenerator;
 import qrbillius.qrbill.QRBillInfo;
 
@@ -18,11 +18,11 @@ public class ErrorChecker {
         result = new ErrorResult();
     }
 
-    public static ErrorResult checkSettings(SettingsManager settings) {
+    public static ErrorResult checkSettings(Settings settings) {
         var checker = new ErrorChecker();
 
-        checker.checkAccount(settings.getCreditorAccount());
-        checker.checkAddress(settings.getCreditorName(), settings.getCreditorAddressLine1(), settings.getCreditorAddressLine2());
+        checker.checkAccount(settings.account());
+        checker.checkAddress(settings.address().getName(), settings.address().getAddressLine1(), settings.address().getAddressLine2());
 
         return checker.getResult();
     }

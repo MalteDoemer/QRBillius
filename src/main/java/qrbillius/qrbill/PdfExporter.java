@@ -4,6 +4,7 @@ import net.codecrete.qrbill.canvas.PDFCanvas;
 import net.codecrete.qrbill.generator.GraphicsFormat;
 import net.codecrete.qrbill.generator.OutputSize;
 import net.codecrete.qrbill.generator.QRBill;
+import qrbillius.Settings;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,8 +12,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class PdfExporter extends QRBillExporter {
-    public PdfExporter(List<QRBillInfo> bills, QRBillConfig config) {
-        super(bills, config);
+    public PdfExporter(List<QRBillInfo> bills, Settings settings) {
+        super(bills, settings);
     }
 
     @Override
@@ -24,7 +25,7 @@ public class PdfExporter extends QRBillExporter {
     }
 
     private byte[] createPDFData() throws IOException {
-        var bills = QRBillGenerator.createBills(this.bills, config, GraphicsFormat.PDF, OutputSize.A4_PORTRAIT_SHEET);
+        var bills = QRBillGenerator.createBills(this.bills, settings, GraphicsFormat.PDF, OutputSize.A4_PORTRAIT_SHEET);
 
 
         var first = bills.get(0);

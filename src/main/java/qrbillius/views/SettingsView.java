@@ -5,9 +5,11 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import net.codecrete.qrbill.generator.Language;
 import qrbillius.Application;
+import qrbillius.SettingsManager;
 import qrbillius.errors.ErrorChecker;
 import qrbillius.errors.ErrorConstants;
 import qrbillius.errors.ErrorMessage;
+import qrbillius.qrbill.QRBillGenerator;
 
 import java.io.IOException;
 
@@ -37,11 +39,17 @@ public class SettingsView extends ViewController {
     public void show(Object arg) {
         var settings = app.getSettings();
 
-        accountField.setText(settings.getCreditorAccount());
-        nameField.setText(settings.getCreditorName());
-        addressLine1Field.setText(settings.getCreditorAddressLine1());
-        addressLine2Field.setText(settings.getCreditorAddressLine2());
-        languageChoiceBox.getSelectionModel().select(settings.getLanguage());
+        accountField.setText(settings.account());
+        nameField.setText(settings.address().getName());
+        addressLine1Field.setText(settings.address().getAddressLine1());
+        addressLine2Field.setText(settings.address().getAddressLine2());
+        languageChoiceBox.getSelectionModel().select(settings.language());
+        csvSeparatorField.setText(settings.csvSeparator());
+        importNameFormatField.setText(settings.nameFormat());
+        importAddressLine1FormatField.setText(settings.addressLine1Format());
+        importAddressLine2FormatField.setText(settings.addressLine2Format());
+        importPaymentAmountFormatField.setText(settings.paymentAmountFormat());
+        importAdditionalInfoFormatField.setText(settings.additionalInfoFormat());
     }
 
     public void onCancelButtonClicked(ActionEvent actionEvent) {
@@ -51,11 +59,15 @@ public class SettingsView extends ViewController {
     public void onSaveButtonClicked(ActionEvent actionEvent) {
         var settings = app.getSettings();
 
-        settings.setCreditorAccount(accountField.getText());
-        settings.setCreditorName(nameField.getText());
-        settings.setCreditorAddressLine1(addressLine1Field.getText());
-        settings.setCreditorAddressLine2(addressLine2Field.getText());
+        settings.setAccount(accountField.getText());
+        settings.setAddress(QRBillGenerator.createAddress(nameField.getText(), addressLine1Field.getText(), addressLine2Field.getText()));
         settings.setLanguage(languageChoiceBox.getValue());
+        settings.setCsvSeparator(csvSeparatorField.getText());
+        settings.setNameFormat(importNameFormatField.getText());
+        settings.setAddressLine1Format(importAddressLine1FormatField.getText());
+        settings.setAddressLine2Format(importAddressLine2FormatField.getText());
+        settings.setPaymentAmountFormat(importPaymentAmountFormatField.getText());
+        settings.setAdditionalInfoFormat(importAdditionalInfoFormatField.getText());
 
         var result = ErrorChecker.checkSettings(settings);
         if (result.hasErrors()) {
@@ -64,7 +76,7 @@ public class SettingsView extends ViewController {
         }
 
         try {
-            settings.save();
+            SettingsManager.save(settings);
         } catch (IOException e) {
             e.printStackTrace();
             var message = new ErrorMessage(ErrorConstants.IO_ERROR_OCCURRED, e.getLocalizedMessage());

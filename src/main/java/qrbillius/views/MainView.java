@@ -81,8 +81,8 @@ public class MainView extends ViewController {
         var ext = FilenameUtils.getExtension(file.getName());
 
         switch (FileExtensions.parse(ext)) {
-            case CSV -> app.switchView(app.getCsvImportView(), file.getAbsolutePath());
-            case XLSX -> app.switchView(app.getXlsxImportView(), file.getAbsolutePath());
+            case CSV -> System.out.println("importing csv ...");
+            case XLSX -> System.out.println("importing xlsx ...");
             default -> {
                 var error = new ErrorMessage(ErrorConstants.UNSUPPORTED_FILE_EXTENSION, ext);
                 app.showErrorMessage(error);
@@ -130,7 +130,7 @@ public class MainView extends ViewController {
     }
 
     private void exportPdf(File file) {
-        var exporter = new PdfExporter(app.getBills(), app.getSettings().getQRBillConfig());
+        var exporter = new PdfExporter(app.getBills(), app.getSettings());
         try {
             exporter.export(file);
             app.getHostServices().showDocument(file.toURI().toString());

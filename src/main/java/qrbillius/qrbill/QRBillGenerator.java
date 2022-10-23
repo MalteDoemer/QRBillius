@@ -1,7 +1,7 @@
 package qrbillius.qrbill;
 
 import net.codecrete.qrbill.generator.*;
-import qrbillius.SettingsManager;
+import qrbillius.Settings;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -33,25 +33,25 @@ public class QRBillGenerator {
         return new BigDecimal(amount);
     }
 
-    public static List<Bill> createBills(List<QRBillInfo> infos, QRBillConfig config, GraphicsFormat format, OutputSize outputSize) {
+    public static List<Bill> createBills(List<QRBillInfo> infos, Settings settings, GraphicsFormat format, OutputSize outputSize) {
         var res = new ArrayList<Bill>();
 
         for (var info : infos) {
-            res.add(createBill(info, config, format, outputSize));
+            res.add(createBill(info, settings, format, outputSize));
         }
 
         return res;
     }
 
-    public static Bill createBill(QRBillInfo info, QRBillConfig config, GraphicsFormat format, OutputSize outputSize) {
+    public static Bill createBill(QRBillInfo info, Settings settings, GraphicsFormat format, OutputSize outputSize) {
         var bill = new Bill();
 
         // Creditor
-        bill.setAccount(config.account());
-        bill.setCreditor(config.address());
+        bill.setAccount(settings.account());
+        bill.setCreditor(settings.address());
 
         // Bill Format
-        bill.getFormat().setLanguage(config.language());
+        bill.getFormat().setLanguage(settings.language());
         bill.getFormat().setGraphicsFormat(format);
         bill.getFormat().setOutputSize(outputSize);
 

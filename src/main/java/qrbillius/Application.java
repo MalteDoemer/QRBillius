@@ -30,15 +30,11 @@ public class Application extends javafx.application.Application {
 
     private ViewInfo addView;
 
-    private ViewInfo csvImportView;
-
-    private ViewInfo xlsxImportView;
-
     private ViewInfo docxExportView;
 
     private ViewInfo settingsView;
 
-    private final SettingsManager settings = new SettingsManager();
+    private Settings settings;
 
     private final ObservableList<QRBillInfo> bills = FXCollections.observableArrayList();
 
@@ -46,15 +42,13 @@ public class Application extends javafx.application.Application {
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
 
-        settings.load();
+        settings = SettingsManager.load();
 
         uiResources = loadBundle("UI");
         errorResources = loadBundle("ErrorMessages");
 
         mainView = loadView("main-view.fxml");
         addView = loadView("add-view.fxml");
-        csvImportView = loadView("csv-import-view.fxml");
-        xlsxImportView = loadView("xlsx-import-view.fxml");
         docxExportView = loadView("docx-export-view.fxml");
         settingsView = loadView("settings-view.fxml");
 
@@ -144,14 +138,6 @@ public class Application extends javafx.application.Application {
         return addView;
     }
 
-    public ViewInfo getCsvImportView() {
-        return csvImportView;
-    }
-
-    public ViewInfo getXlsxImportView() {
-        return xlsxImportView;
-    }
-
     public ViewInfo getDocxExportView() {
         return docxExportView;
     }
@@ -160,7 +146,7 @@ public class Application extends javafx.application.Application {
         return settingsView;
     }
 
-    public SettingsManager getSettings() {
+    public Settings getSettings() {
         return settings;
     }
 

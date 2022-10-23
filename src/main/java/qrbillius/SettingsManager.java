@@ -1,8 +1,7 @@
 package qrbillius;
 
+import net.codecrete.qrbill.generator.Address;
 import net.codecrete.qrbill.generator.Language;
-import qrbillius.qrbill.CSVConfig;
-import qrbillius.qrbill.QRBillConfig;
 import qrbillius.qrbill.QRBillGenerator;
 
 import java.io.File;
@@ -21,21 +20,20 @@ public class SettingsManager {
     public final static String LANGUAGE = "Language";
 
     public final static String CSV_SEPARATOR = "CSVSeparator";
-    public final static String CSV_NAME_FORMAT = "CSVNameFormat";
-    public final static String CSV_ADDRESS_LINE1_FORMAT = "CSVAddressLine1Format";
-    public final static String CSV_ADDRESS_LINE2_FORMAT = "CSVAddressLine2Format";
-    public final static String CSV_PAYMENT_AMOUNT_FORMAT = "CSVPaymentAmountFormat";
-    public final static String CSV_ADDITIONAL_INFO_FORMAT = "CSVAdditionalInfoFormat";
-
+    public final static String NAME_FORMAT = "NameFormat";
+    public final static String ADDRESS_LINE1_FORMAT = "AddressLine1Format";
+    public final static String ADDRESS_LINE2_FORMAT = "AddressLine2Format";
+    public final static String PAYMENT_AMOUNT_FORMAT = "PaymentAmountFormat";
+    public final static String ADDITIONAL_INFO_FORMAT = "AdditionalInfoFormat";
 
     private final Properties properties;
 
-
-    public SettingsManager() {
-        properties = new Properties();
+    private SettingsManager(Properties properties) {
+        this.properties = properties;
     }
 
-    public void load() throws IOException {
+    public static Settings load() throws IOException {
+        var properties = new Properties();
         var configFile = getConfigFile();
 
         if (configFile.exists()) {
@@ -43,10 +41,17 @@ public class SettingsManager {
                 properties.load(reader);
             }
         }
+
+        var manager = new SettingsManager(properties);
+        return manager.getSettings();
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void save() throws IOException {
+    public static void save(Settings settings) throws IOException {
+        var properties = new Properties();
+        var manager = new SettingsManager(properties);
+        manager.setSettings(settings);
+
         var configFile = getConfigFile();
 
         if (!configFile.exists()) {
@@ -59,51 +64,63 @@ public class SettingsManager {
         }
     }
 
-    public void setProperty(String key, String value) {
-        properties.setProperty(key, value);
+    private static File getConfigFile() throws IOException {
+        var userDir = System.getProperty("user.home");
+
+        if (userDir == null) {
+            throw new IOException("user.home not found");
+        }
+
+        var dir = Paths.get(userDir, ".qrbillius").toFile();
+        return Paths.get(dir.toString(), "qrbillius.properties").toFile();
     }
 
-    public String getProperty(String key) {
-        return properties.getProperty(key, "");
+    private Settings getSettings() {
+        String account = getProperty(CREDITOR_ACCOUNT);
+        Address address = getCreditorAddress();
+        Language language = getLanguage();
+        String csvSeparator = getProperty(CSV_SEPARATOR);
+        String nameFormat = getProperty(NAME_FORMAT);
+        String addressLine1Format = getProperty(ADDRESS_LINE1_FORMAT);
+        String addressLine2Format = getProperty(ADDRESS_LINE2_FORMAT);
+        String paymentAmountFormat = getProperty(PAYMENT_AMOUNT_FORMAT);
+        String additionalInfoFormat = getProperty(ADDITIONAL_INFO_FORMAT);
+
+        return new Settings(
+                account,
+                address,
+                language,
+                csvSeparator,
+                nameFormat,
+                addressLine1Format,
+                addressLine2Format,
+                paymentAmountFormat,
+                additionalInfoFormat
+        );
     }
 
-    public String getProperty(String key, String defaultValue) {
-        return properties.getProperty(key, defaultValue);
+    private void setSettings(Settings settings) {
+        setProperty(CREDITOR_ACCOUNT, settings.account());
+        setProperty(CREDITOR_NAME, settings.address().getName());
+        setProperty(CREDITOR_ADDRESS_LINE1, settings.address().getAddressLine1());
+        setProperty(CREDITOR_ADDRESS_LINE2, settings.address().getAddressLine2());
+        setProperty(LANGUAGE, settings.language().name());
+        setProperty(CSV_SEPARATOR, settings.csvSeparator());
+        setProperty(NAME_FORMAT, settings.nameFormat());
+        setProperty(ADDRESS_LINE1_FORMAT, settings.addressLine1Format());
+        setProperty(ADDRESS_LINE2_FORMAT, settings.addressLine2Format());
+        setProperty(PAYMENT_AMOUNT_FORMAT, settings.paymentAmountFormat());
+        setProperty(ADDITIONAL_INFO_FORMAT, settings.additionalInfoFormat());
     }
 
-    public String getCreditorAccount() {
-        return getProperty(CREDITOR_ACCOUNT);
+    private Address getCreditorAddress() {
+        var name = getProperty(CREDITOR_NAME);
+        var addressLine1 = getProperty(CREDITOR_ADDRESS_LINE1);
+        var addressLine2 = getProperty(CREDITOR_ADDRESS_LINE2);
+        return QRBillGenerator.createAddress(name, addressLine1, addressLine2);
     }
 
-    public void setCreditorAccount(String creditorAccount) {
-        setProperty(CREDITOR_ACCOUNT, creditorAccount);
-    }
-
-    public String getCreditorName() {
-        return getProperty(CREDITOR_NAME);
-    }
-
-    public void setCreditorName(String creditorName) {
-        setProperty(CREDITOR_NAME, creditorName);
-    }
-
-    public String getCreditorAddressLine1() {
-        return getProperty(CREDITOR_ADDRESS_LINE1);
-    }
-
-    public void setCreditorAddressLine1(String creditorAddressLine1) {
-        setProperty(CREDITOR_ADDRESS_LINE1, creditorAddressLine1);
-    }
-
-    public String getCreditorAddressLine2() {
-        return getProperty(CREDITOR_ADDRESS_LINE2);
-    }
-
-    public void setCreditorAddressLine2(String creditorAddressLine2) {
-        setProperty(CREDITOR_ADDRESS_LINE2, creditorAddressLine2);
-    }
-
-    public Language getLanguage() {
+    private Language getLanguage() {
         var lang = getProperty(LANGUAGE, "DE");
 
         if (QRBillGenerator.isValidLanguage(lang)) {
@@ -114,83 +131,15 @@ public class SettingsManager {
         }
     }
 
-    public void setLanguage(Language language) {
-        setProperty(LANGUAGE, language.toString());
+    private String getProperty(String key) {
+        return properties.getProperty(key, "");
     }
 
-    public QRBillConfig getQRBillConfig() {
-        var account = getCreditorAccount();
-        var address = QRBillGenerator.createAddress(getCreditorName(), getCreditorAddressLine1(), getCreditorAddressLine2());
-        return new QRBillConfig(account, address, getLanguage());
+    private String getProperty(String key, String defaultValue) {
+        return properties.getProperty(key, defaultValue);
     }
 
-    public String getCsvSeparator() {
-        return properties.getProperty(CSV_SEPARATOR, ",");
-    }
-
-    public void setCsvSeparator(String csvSeparator) {
-        properties.setProperty(CSV_SEPARATOR, csvSeparator);
-    }
-
-    public String getCsvNameFormat() {
-        return properties.getProperty(CSV_NAME_FORMAT, "$1");
-    }
-
-    public void setCsvNameFormat(String csvNameFormat) {
-        properties.setProperty(CSV_NAME_FORMAT, csvNameFormat);
-    }
-
-    public String getCsvAddressLine1Format() {
-        return properties.getProperty(CSV_ADDRESS_LINE1_FORMAT, "$2");
-    }
-
-    public void setCsvAddressLine1Format(String csvAddressLine1Format) {
-        properties.setProperty(CSV_ADDRESS_LINE1_FORMAT, csvAddressLine1Format);
-    }
-
-    public String getCsvAddressLine2Format() {
-        return properties.getProperty(CSV_ADDRESS_LINE2_FORMAT, "$3");
-    }
-
-    public void setCsvAddressLine2Format(String csvAddressLine2Format) {
-        properties.setProperty(CSV_ADDRESS_LINE2_FORMAT, csvAddressLine2Format);
-    }
-
-    public String getCsvPaymentAmountFormat() {
-        return properties.getProperty(CSV_PAYMENT_AMOUNT_FORMAT, "$4");
-    }
-
-    public void setCsvPaymentAmountFormat(String csvPaymentAmountFormat) {
-        properties.setProperty(CSV_PAYMENT_AMOUNT_FORMAT, csvPaymentAmountFormat);
-    }
-
-    public String getCsvAdditionalInfoFormat() {
-        return properties.getProperty(CSV_ADDITIONAL_INFO_FORMAT, "$5");
-    }
-
-    public void setCsvAdditionalInfoFormat(String csvAdditionalInfoFormat) {
-        properties.setProperty(CSV_ADDITIONAL_INFO_FORMAT, csvAdditionalInfoFormat);
-    }
-
-    public CSVConfig getCsvConfig() {
-        return new CSVConfig(
-                getCsvSeparator(),
-                getCsvNameFormat(),
-                getCsvAddressLine1Format(),
-                getCsvAddressLine2Format(),
-                getCsvPaymentAmountFormat(),
-                getCsvAdditionalInfoFormat()
-        );
-    }
-
-    private File getConfigFile() throws IOException {
-        var userDir = System.getProperty("user.home");
-
-        if (userDir == null) {
-            throw new IOException("user.home not found");
-        }
-
-        var dir = Paths.get(userDir, ".qrbill").toFile();
-        return Paths.get(dir.toString(), "qrbill.properties").toFile();
+    private void setProperty(String key, String value) {
+        properties.setProperty(key, value);
     }
 }

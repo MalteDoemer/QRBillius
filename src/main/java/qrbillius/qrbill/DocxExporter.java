@@ -11,6 +11,7 @@ import org.docx4j.wml.Drawing;
 import org.docx4j.wml.ObjectFactory;
 import org.docx4j.wml.P;
 import org.docx4j.wml.R;
+import qrbillius.Settings;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,8 +20,8 @@ import java.util.List;
 
 public class DocxExporter extends QRBillExporter {
 
-    public DocxExporter(List<QRBillInfo> bills, QRBillConfig config) {
-        super(bills, config);
+    public DocxExporter(List<QRBillInfo> bills, Settings settings) {
+        super(bills, settings);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class DocxExporter extends QRBillExporter {
     }
 
     private byte[] createImageData(QRBillInfo info) {
-        var bill = QRBillGenerator.createBill(info, config, GraphicsFormat.PNG, OutputSize.QR_BILL_ONLY);
+        var bill = QRBillGenerator.createBill(info, settings, GraphicsFormat.PNG, OutputSize.QR_BILL_ONLY);
         return QRBill.generate(bill);
     }
 

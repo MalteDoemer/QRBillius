@@ -46,23 +46,23 @@
                             <TextField fx:id="csvSeparatorField"/>
                         </VBox>
                         <VBox spacing="5.0">
-                            <Label text="%importNameFormatField"/>
+                            <Label text="%nameFormatField"/>
                             <TextField fx:id="importNameFormatField"/>
                         </VBox>
                         <VBox spacing="5.0">
-                            <Label text="%importAddressLine1FormatField"/>
+                            <Label text="%addressLine1FormatField"/>
                             <TextField fx:id="importAddressLine1FormatField"/>
                         </VBox>
                         <VBox spacing="5.0">
-                            <Label text="%importAddressLine2FormatField"/>
+                            <Label text="%addressLine2FormatField"/>
                             <TextField fx:id="importAddressLine2FormatField"/>
                         </VBox>
                         <VBox spacing="5.0">
-                            <Label text="%importPaymentAmountFormatField"/>
+                            <Label text="%paymentAmountFormatField"/>
                             <TextField fx:id="importPaymentAmountFormatField"/>
                         </VBox>
                         <VBox spacing="5.0">
-                            <Label text="%importAdditionalInfoFormatField"/>
+                            <Label text="%additionalInfoFormatField"/>
                             <TextField fx:id="importAdditionalInfoFormatField"/>
                         </VBox>
                     </children>
