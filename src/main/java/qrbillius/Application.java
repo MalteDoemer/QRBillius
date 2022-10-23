@@ -34,8 +34,6 @@ public class Application extends javafx.application.Application {
 
     private ViewInfo xlsxImportView;
 
-    private ViewInfo pdfExportView;
-
     private ViewInfo docxExportView;
 
     private ViewInfo settingsView;
@@ -57,7 +55,6 @@ public class Application extends javafx.application.Application {
         addView = loadView("add-view.fxml");
         csvImportView = loadView("csv-import-view.fxml");
         xlsxImportView = loadView("xlsx-import-view.fxml");
-        pdfExportView = loadView("pdf-export-view.fxml");
         docxExportView = loadView("docx-export-view.fxml");
         settingsView = loadView("settings-view.fxml");
 
@@ -153,10 +150,6 @@ public class Application extends javafx.application.Application {
 
     public ViewInfo getXlsxImportView() {
         return xlsxImportView;
-    }
-
-    public ViewInfo getPdfExportView() {
-        return pdfExportView;
     }
 
     public ViewInfo getDocxExportView() {

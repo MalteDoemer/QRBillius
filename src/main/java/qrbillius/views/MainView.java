@@ -7,10 +7,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import org.apache.commons.io.FilenameUtils;
 import qrbillius.Application;
+import qrbillius.io.FileExtensions;
 import qrbillius.errors.ErrorConstants;
 import qrbillius.errors.ErrorMessage;
 import qrbillius.qrbill.*;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MainView extends ViewController {
@@ -63,9 +65,7 @@ public class MainView extends ViewController {
     }
 
     public void onOpenButtonClick(ActionEvent event) {
-
         var chooser = new FileChooser();
-
         chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter(app.getUiResources().getString("allFileExtensions"), "*.csv", "*.xlsx"),
                 new FileChooser.ExtensionFilter("CSV", "*.csv"),
@@ -80,13 +80,13 @@ public class MainView extends ViewController {
 
         var ext = FilenameUtils.getExtension(file.getName());
 
-        var view = getImportView(ext);
-
-        if (view != null) {
-            app.switchView(view, file.getAbsolutePath());
-        } else {
-            var error = new ErrorMessage(ErrorConstants.UNSUPPORTED_FILE_EXTENSION, ext);
-            app.showErrorMessage(error);
+        switch (FileExtensions.parse(ext)) {
+            case CSV -> app.switchView(app.getCsvImportView(), file.getAbsolutePath());
+            case XLSX -> app.switchView(app.getXlsxImportView(), file.getAbsolutePath());
+            default -> {
+                var error = new ErrorMessage(ErrorConstants.UNSUPPORTED_FILE_EXTENSION, ext);
+                app.showErrorMessage(error);
+            }
         }
     }
 
@@ -100,7 +100,6 @@ public class MainView extends ViewController {
 
     public void onExportButtonClick(ActionEvent actionEvent) {
         var chooser = new FileChooser();
-
         chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter(app.getUiResources().getString("allFileExtensions"), "*.pdf", "*.docx"),
                 new FileChooser.ExtensionFilter("PDF", "*.pdf"),
@@ -115,13 +114,14 @@ public class MainView extends ViewController {
 
         var ext = FilenameUtils.getExtension(file.getName());
 
-        var view = getExportView(ext);
+        switch (FileExtensions.parse(ext)) {
+            case PDF -> exportPdf(file);
+            case DOCX -> app.switchView(app.getDocxExportView(), file.getAbsolutePath());
+            default -> {
+                var error = new ErrorMessage(ErrorConstants.UNSUPPORTED_FILE_EXTENSION, ext);
+                app.showErrorMessage(error);
 
-        if (view != null) {
-            app.switchView(view, file.getAbsolutePath());
-        } else {
-            var error = new ErrorMessage(ErrorConstants.UNSUPPORTED_FILE_EXTENSION, ext);
-            app.showErrorMessage(error);
+            }
         }
     }
 
@@ -129,23 +129,15 @@ public class MainView extends ViewController {
         app.switchView(app.getSettingsView());
     }
 
-    private ViewInfo getExportView(String fileExtension) {
-        if (fileExtension.compareToIgnoreCase("pdf") == 0) {
-            return app.getCsvImportView();
-        } else if (fileExtension.compareToIgnoreCase("docx") == 0) {
-            return app.getXlsxImportView();
-        } else {
-            return null;
-        }
-    }
-
-    private ViewInfo getImportView(String fileExtension) {
-        if (fileExtension.compareToIgnoreCase("csv") == 0) {
-            return app.getCsvImportView();
-        } else if (fileExtension.compareToIgnoreCase("xlsx") == 0) {
-            return app.getXlsxImportView();
-        } else {
-            return null;
+    private void exportPdf(File file) {
+        var exporter = new PdfExporter(app.getBills(), app.getSettings().getQRBillConfig());
+        try {
+            exporter.export(file);
+            app.getHostServices().showDocument(file.toURI().toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+            var message = new ErrorMessage(ErrorConstants.IO_ERROR_OCCURRED, e.getLocalizedMessage());
+            app.showErrorMessage(message);
         }
     }
 }

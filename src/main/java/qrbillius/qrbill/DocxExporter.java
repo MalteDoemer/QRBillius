@@ -5,7 +5,6 @@ import net.codecrete.qrbill.generator.OutputSize;
 import net.codecrete.qrbill.generator.QRBill;
 
 import org.docx4j.dml.wordprocessingDrawing.Inline;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
 import org.docx4j.wml.Drawing;
@@ -18,7 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class DocxExporter extends AbstractExporter {
+public class DocxExporter extends QRBillExporter {
 
     public DocxExporter(List<QRBillInfo> bills, QRBillConfig config) {
         super(bills, config);

@@ -4,14 +4,13 @@ import net.codecrete.qrbill.canvas.PDFCanvas;
 import net.codecrete.qrbill.generator.GraphicsFormat;
 import net.codecrete.qrbill.generator.OutputSize;
 import net.codecrete.qrbill.generator.QRBill;
-import qrbillius.SettingsManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class PdfExporter extends AbstractExporter {
+public class PdfExporter extends QRBillExporter {
     public PdfExporter(List<QRBillInfo> bills, QRBillConfig config) {
         super(bills, config);
     }

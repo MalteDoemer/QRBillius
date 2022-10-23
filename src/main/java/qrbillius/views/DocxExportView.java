@@ -1,21 +1,35 @@
 package qrbillius.views;
 
+import javafx.event.ActionEvent;
+import javafx.scene.control.ChoiceBox;
 import qrbillius.Application;
-
-import java.io.File;
 
 public class DocxExportView extends ViewController {
 
-    private File file;
+    public enum ExportType {
+        PDF,
+        DOCX,
+    }
+
+    public ChoiceBox<ExportType> exportTypeChoiceBox;
+    private Application app;
 
     @Override
     public void init(Application app) {
-
+        this.app = app;
+        exportTypeChoiceBox.getItems().addAll(ExportType.values());
     }
 
     @Override
     public void show(Object arg) {
-        var path = (String) arg;
-        file = new File(path);
+    }
+
+    public void onCancelButtonClick(ActionEvent actionEvent) {
+        app.switchView(app.getMainView());
+    }
+
+    public void onSaveButtonClick(ActionEvent actionEvent) {
+
+
     }
 }
