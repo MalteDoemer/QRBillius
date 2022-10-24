@@ -20,12 +20,12 @@ import java.util.List;
 
 public class DocxExporter extends QRBillExporter {
 
-    public DocxExporter(List<QRBillInfo> bills, Settings settings) {
-        super(bills, settings);
+    public DocxExporter(Settings settings) {
+        super(settings);
     }
 
     @Override
-    public void export(File file) throws IOException {
+    public void export(File file, List<QRBillInfo> bills) throws IOException {
         try {
             var wordPackage = WordprocessingMLPackage.createPackage();
             var mainDocumentPart = wordPackage.getMainDocumentPart();

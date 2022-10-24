@@ -8,7 +8,11 @@ public class ErrorResult {
 
     private static final List<ErrorMessage> EMPTY_LIST = Collections.emptyList();
 
+    public static final int NO_LINE_NUMBER = -1;
+
     private List<ErrorMessage> errors;
+
+    private int lineNumber = NO_LINE_NUMBER;
 
     public ErrorResult() {
     }
@@ -30,9 +34,22 @@ public class ErrorResult {
         var message = new ErrorMessage(key, params);
         addMessage(message);
     }
+
     public void addMessage(ErrorMessage message) {
         if (errors == null)
             errors = new ArrayList<>();
         errors.add(message);
+    }
+
+    public boolean hasLineNumber() {
+        return lineNumber != NO_LINE_NUMBER;
+    }
+
+    public int getLineNumber() {
+        return lineNumber;
+    }
+
+    public void setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
     }
 }

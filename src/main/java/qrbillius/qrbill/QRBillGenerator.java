@@ -30,7 +30,7 @@ public class QRBillGenerator {
             str = str.substring(3).strip();
         }
 
-        return new BigDecimal(amount);
+        return new BigDecimal(str);
     }
 
     public static List<Bill> createBills(List<QRBillInfo> infos, Settings settings, GraphicsFormat format, OutputSize outputSize) {

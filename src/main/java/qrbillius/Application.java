@@ -7,8 +7,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import qrbillius.errors.ErrorConstants;
 import qrbillius.errors.ErrorMessage;
 import qrbillius.errors.ErrorResult;
+import qrbillius.errors.ErrorResultException;
 import qrbillius.qrbill.QRBillInfo;
 import qrbillius.views.ViewController;
 import qrbillius.views.ViewInfo;
@@ -94,7 +96,7 @@ public class Application extends javafx.application.Application {
         var messages = result.getErrorMessages();
 
         if (messages.size() == 1) {
-            showErrorMessage(messages.get(0));
+            showErrorMessage(messages.get(0), result.getLineNumber());
             return;
         }
 
@@ -106,17 +108,30 @@ public class Application extends javafx.application.Application {
             builder.append('\n');
         }
 
-        var dialog = new Alert(Alert.AlertType.ERROR, builder.toString());
-        dialog.initOwner(stage.getOwner());
-        dialog.showAndWait();
+        displayErrorText(builder.toString(), result.getLineNumber());
     }
 
     public void showErrorMessage(ErrorMessage message) {
         var text = message.getFormattedMessage(errorResources);
+        displayErrorText(text, ErrorResult.NO_LINE_NUMBER);
+    }
+
+    public void showErrorMessage(ErrorMessage message, int lineNumber) {
+        var text = message.getFormattedMessage(errorResources);
+        displayErrorText(text, lineNumber);
+    }
+
+    private void displayErrorText(String text, int lineNumber) {
+        if (lineNumber != ErrorResult.NO_LINE_NUMBER) {
+            var lineInfo = String.format(errorResources.getString(ErrorConstants.COLUMN_INFO), lineNumber);
+            text = String.format("%s: %s", lineInfo, text);
+        }
+
         var dialog = new Alert(Alert.AlertType.ERROR, text);
         dialog.initOwner(stage.getOwner());
         dialog.showAndWait();
     }
+
 
     public Stage getStage() {
         return stage;

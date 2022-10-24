@@ -7,9 +7,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import org.apache.commons.io.FilenameUtils;
 import qrbillius.Application;
+import qrbillius.errors.*;
 import qrbillius.io.FileExtensions;
-import qrbillius.errors.ErrorConstants;
-import qrbillius.errors.ErrorMessage;
 import qrbillius.qrbill.*;
 
 import java.io.File;
@@ -81,7 +80,7 @@ public class MainView extends ViewController {
         var ext = FilenameUtils.getExtension(file.getName());
 
         switch (FileExtensions.parse(ext)) {
-            case CSV -> System.out.println("importing csv ...");
+            case CSV -> importFrom(new CsvImporter(app.getSettings()), file);
             case XLSX -> System.out.println("importing xlsx ...");
             default -> {
                 var error = new ErrorMessage(ErrorConstants.UNSUPPORTED_FILE_EXTENSION, ext);
@@ -115,7 +114,7 @@ public class MainView extends ViewController {
         var ext = FilenameUtils.getExtension(file.getName());
 
         switch (FileExtensions.parse(ext)) {
-            case PDF -> exportPdf(file);
+            case PDF -> exportTo(new PdfExporter(app.getSettings()), file);
             case DOCX -> app.switchView(app.getDocxExportView(), file.getAbsolutePath());
             default -> {
                 var error = new ErrorMessage(ErrorConstants.UNSUPPORTED_FILE_EXTENSION, ext);
@@ -129,11 +128,27 @@ public class MainView extends ViewController {
         app.switchView(app.getSettingsView());
     }
 
-    private void exportPdf(File file) {
-        var exporter = new PdfExporter(app.getBills(), app.getSettings());
+    private void exportTo(QRBillExporter exporter, File file) {
         try {
-            exporter.export(file);
+            exporter.export(file, app.getBills());
             app.getHostServices().showDocument(file.toURI().toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+            var message = new ErrorMessage(ErrorConstants.IO_ERROR_OCCURRED, e.getLocalizedMessage());
+            app.showErrorMessage(message);
+        }
+    }
+
+    private void importFrom(QRBillImporter importer, File file) {
+        try {
+            var bills = importer.load(file);
+            app.getBills().addAll(bills);
+        } catch (ErrorResultException e) {
+            app.showErrorResult(e.getResult());
+        } catch (FormatSpecifierInvalidException e) {
+            throw new RuntimeException(e);
+        } catch (FormatOutOfBoundsException e) {
+            throw new RuntimeException(e);
         } catch (IOException e) {
             e.printStackTrace();
             var message = new ErrorMessage(ErrorConstants.IO_ERROR_OCCURRED, e.getLocalizedMessage());

@@ -12,20 +12,20 @@ import java.io.IOException;
 import java.util.List;
 
 public class PdfExporter extends QRBillExporter {
-    public PdfExporter(List<QRBillInfo> bills, Settings settings) {
-        super(bills, settings);
+    public PdfExporter(Settings settings) {
+        super(settings);
     }
 
     @Override
-    public void export(File file) throws IOException {
-        var bytes = createPDFData();
+    public void export(File file, List<QRBillInfo> bills) throws IOException {
+        var bytes = createPDFData(bills);
         try (var stream = new FileOutputStream(file)) {
             stream.write(bytes);
         }
     }
 
-    private byte[] createPDFData() throws IOException {
-        var bills = QRBillGenerator.createBills(this.bills, settings, GraphicsFormat.PDF, OutputSize.A4_PORTRAIT_SHEET);
+    private byte[] createPDFData(List<QRBillInfo> billInfos) throws IOException {
+        var bills = QRBillGenerator.createBills(billInfos, settings, GraphicsFormat.PDF, OutputSize.A4_PORTRAIT_SHEET);
 
 
         var first = bills.get(0);
