@@ -19,7 +19,7 @@ public class CsvImporter extends QRBillImporter {
     }
 
     @Override
-    public List<QRBillInfo> load(File file) throws IOException, ErrorResultException, FormatSpecifierInvalidException, FormatOutOfBoundsException {
+    public List<QRBillInfo> load(File file) throws IOException, ErrorResultException {
 
 //        System.out.printf("importing %s\n", file.getAbsolutePath());
 
@@ -36,24 +36,28 @@ public class CsvImporter extends QRBillImporter {
 
             for (var record : records) {
                 var list = record.toList();
+                try {
+                    var name = nameFormatter.parse(list);
+                    var addressLine1 = addressLine1Formatter.parse(list);
+                    var addressLine2 = addressLine2Formatter.parse(list);
+                    var paymentAmount = paymentAmountFormatter.parse(list);
+                    var additionalInfo = additionalInfoFormatter.parse(list);
 
+                    var billInfo = new QRBillInfo(name, addressLine1, addressLine2, paymentAmount, additionalInfo);
 
-                var name = nameFormatter.parse(list);
-                var addressLine1 = addressLine1Formatter.parse(list);
-                var addressLine2 = addressLine2Formatter.parse(list);
-                var paymentAmount = paymentAmountFormatter.parse(list);
-                var additionalInfo = additionalInfoFormatter.parse(list);
+                    var res = ErrorChecker.checkBillingInformation(billInfo);
 
-                var billInfo = new QRBillInfo(name, addressLine1, addressLine2, paymentAmount, additionalInfo);
+                    if (res.hasErrors()) {
+                        res.setLineNumber((int) records.getCurrentLineNumber());
+                        throw new ErrorResultException(res);
+                    }
 
-                var res = ErrorChecker.checkBillingInformation(billInfo);
-
-                if (res.hasErrors()) {
+                    bills.add(billInfo);
+                } catch (FormatException e) {
+                    var res = e.createErrorResult();
                     res.setLineNumber((int) records.getCurrentLineNumber());
                     throw new ErrorResultException(res);
                 }
-
-                bills.add(billInfo);
             }
 
             return bills;

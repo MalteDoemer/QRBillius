@@ -17,5 +17,5 @@ public abstract class QRBillImporter {
         this.settings = settings;
     }
 
-    public abstract List<QRBillInfo> load(File file) throws IOException, ErrorResultException, FormatSpecifierInvalidException, FormatOutOfBoundsException;
+    public abstract List<QRBillInfo> load(File file) throws IOException, ErrorResultException;
 }

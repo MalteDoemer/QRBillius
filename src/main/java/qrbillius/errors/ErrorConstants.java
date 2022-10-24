@@ -7,7 +7,7 @@ public class ErrorConstants {
 
     public static final String UNHANDLED_EXCEPTION_OCCURRED = "unhandledExceptionOccurred";
 
-    public static final String COLUMN_INFO = "columnInfo";
+    public static final String LINE_INFO = "lineInfo";
 
     public static final String ACCOUNT_INVALID = "accountInvalid";
 
@@ -36,4 +36,8 @@ public class ErrorConstants {
     public static final String LANGUAGE_INVALID = "languageInvalid";
 
     public static final String UNSUPPORTED_FILE_EXTENSION = "unsupportedFileExtension";
+
+    public static final String FORMAT_SPECIFIER_INVALID = "formatSpecifierInvalid";
+
+    public static final String FORMAT_SPECIFIER_OUT_OF_BOUNDS = "formatSpecifierOutOfBounds";
 }

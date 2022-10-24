@@ -145,10 +145,6 @@ public class MainView extends ViewController {
             app.getBills().addAll(bills);
         } catch (ErrorResultException e) {
             app.showErrorResult(e.getResult());
-        } catch (FormatSpecifierInvalidException e) {
-            throw new RuntimeException(e);
-        } catch (FormatOutOfBoundsException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             e.printStackTrace();
             var message = new ErrorMessage(ErrorConstants.IO_ERROR_OCCURRED, e.getLocalizedMessage());

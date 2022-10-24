@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import qrbillius.errors.ErrorConstants;
 import qrbillius.errors.ErrorMessage;
 import qrbillius.errors.ErrorResult;
-import qrbillius.errors.ErrorResultException;
 import qrbillius.qrbill.QRBillInfo;
 import qrbillius.views.ViewController;
 import qrbillius.views.ViewInfo;
@@ -123,7 +122,7 @@ public class Application extends javafx.application.Application {
 
     private void displayErrorText(String text, int lineNumber) {
         if (lineNumber != ErrorResult.NO_LINE_NUMBER) {
-            var lineInfo = String.format(errorResources.getString(ErrorConstants.COLUMN_INFO), lineNumber);
+            var lineInfo = String.format(errorResources.getString(ErrorConstants.LINE_INFO), lineNumber);
             text = String.format("%s: %s", lineInfo, text);
         }
 

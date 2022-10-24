@@ -1,31 +1,22 @@
 package qrbillius.errors;
 
-public class FormatOutOfBoundsException extends Exception {
-    private final String format;
-    private final int pos;
+public class FormatOutOfBoundsException extends FormatException {
     private final int index;
 
     public FormatOutOfBoundsException(String format, int pos, int index) {
-        this.format = format;
-        this.pos = pos;
-
+        super(format, pos);
         this.index = index;
-    }
-
-    public String getFormat() {
-        return format;
-    }
-
-    public int getPos() {
-        return pos;
     }
 
     public int getIndex() {
         return index;
     }
 
+
     @Override
-    public String getMessage() {
-        return String.format("The format index %d is out of bounds", index);
+    public ErrorResult createErrorResult() {
+        var result = new ErrorResult();
+        result.addMessage(new ErrorMessage(ErrorConstants.FORMAT_SPECIFIER_OUT_OF_BOUNDS, "$" + getIndex()));
+        return result;
     }
 }

@@ -1,5 +1,6 @@
 package qrbillius.qrbill;
 
+import qrbillius.errors.FormatException;
 import qrbillius.errors.FormatOutOfBoundsException;
 import qrbillius.errors.FormatSpecifierInvalidException;
 
@@ -25,7 +26,7 @@ public class FormatParser {
      * This function parses the formatString and replaces the placeholders (a dollar followed by a number)
      * with the appropriate string from the record.
      */
-    public String parse(List<String> record) throws FormatSpecifierInvalidException, FormatOutOfBoundsException {
+    public String parse(List<String> record) throws FormatException {
         builder.setLength(0);
 
         for (int i = 0; i < formatString.length(); i++) {
@@ -51,16 +52,17 @@ public class FormatParser {
                 j++;
             }
 
-            var number = Integer.parseInt(formatString.substring(i + 1, j));
+            var parsedNumber = Integer.parseInt(formatString.substring(i + 1, j));
+            var index = parsedNumber;
 
             if (!isZeroIndexed()) {
-                number = number - 1;
+                index = parsedNumber - 1;
             }
 
-            if (number >= record.size()) {
-                throw new FormatOutOfBoundsException(formatString, i, number);
+            if (index >= record.size()) {
+                throw new FormatOutOfBoundsException(formatString, i, parsedNumber);
             } else {
-                builder.append(record.get(number));
+                builder.append(record.get(index));
             }
 
             i = j - 1; // skip to the end of the number
