@@ -81,7 +81,7 @@ public class MainView extends ViewController {
 
         switch (FileExtensions.parse(ext)) {
             case CSV -> importFrom(new CsvImporter(app.getSettings()), file);
-            case XLSX -> System.out.println("importing xlsx ...");
+            case XLSX -> importFrom(new XlsxImporter(app.getSettings()), file);
             default -> {
                 var error = new ErrorMessage(ErrorConstants.UNSUPPORTED_FILE_EXTENSION, ext);
                 app.showErrorMessage(error);

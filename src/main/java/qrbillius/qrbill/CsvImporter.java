@@ -20,12 +20,7 @@ public class CsvImporter extends QRBillImporter {
 
     @Override
     public List<QRBillInfo> load(File file) throws IOException, ErrorResultException {
-
-//        System.out.printf("importing %s\n", file.getAbsolutePath());
-
-        try (var records = loadRecords(file)) {
-
-
+        try (var records = createParser(file)) {
             var bills = new ArrayList<QRBillInfo>();
 
             var nameFormatter = new FormatParser(settings.nameFormat());
@@ -65,7 +60,7 @@ public class CsvImporter extends QRBillImporter {
 
     }
 
-    private CSVParser loadRecords(File file) throws IOException {
+    private CSVParser createParser(File file) throws IOException {
         var format = CSVFormat
                 .EXCEL
                 .builder()
@@ -77,5 +72,4 @@ public class CsvImporter extends QRBillImporter {
         var reader = new InputStreamReader(new UnicodeBOMInputStream(new FileInputStream(file)).skipBOM());
         return format.parse(reader);
     }
-
 }
