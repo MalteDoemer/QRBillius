@@ -1,5 +1,6 @@
 package qrbillius;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +8,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import org.docx4j.openpackaging.exceptions.InvalidFormatException;
+import org.docx4j.openpackaging.packages.SpreadsheetMLPackage;
 import qrbillius.errors.ErrorConstants;
 import qrbillius.errors.ErrorMessage;
 import qrbillius.errors.ErrorResult;
@@ -57,6 +60,16 @@ public class Application extends javafx.application.Application {
         stage.getScene().getStylesheets().add(loadStylesheet("style.css"));
         stage.setTitle(uiResources.getString("title"));
         stage.show();
+
+        var thread = new Thread(this::preloadDocx4j);
+        thread.start();
+    }
+
+    private void preloadDocx4j() {
+        try {
+            SpreadsheetMLPackage.createPackage();
+        } catch (InvalidFormatException ignored) {
+        }
     }
 
     public void switchView(ViewInfo view) {
