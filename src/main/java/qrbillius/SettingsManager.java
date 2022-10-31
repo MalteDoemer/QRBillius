@@ -19,6 +19,7 @@ public class SettingsManager {
     public final static String CREDITOR_ADDRESS_LINE2 = "AddressLine2";
     public final static String LANGUAGE = "Language";
 
+    public final static String WORD_TEMPLATE = "wordTemplateField";
     public final static String CSV_SEPARATOR = "CSVSeparator";
     public final static String NAME_FORMAT = "NameFormat";
     public final static String ADDRESS_LINE1_FORMAT = "AddressLine1Format";
@@ -76,20 +77,22 @@ public class SettingsManager {
     }
 
     private Settings getSettings() {
-        String account = getProperty(CREDITOR_ACCOUNT);
-        Address address = getCreditorAddress();
-        Language language = getLanguage();
-        String csvSeparator = getProperty(CSV_SEPARATOR);
-        String nameFormat = getProperty(NAME_FORMAT);
-        String addressLine1Format = getProperty(ADDRESS_LINE1_FORMAT);
-        String addressLine2Format = getProperty(ADDRESS_LINE2_FORMAT);
-        String paymentAmountFormat = getProperty(PAYMENT_AMOUNT_FORMAT);
-        String additionalInfoFormat = getProperty(ADDITIONAL_INFO_FORMAT);
+        var account = getProperty(CREDITOR_ACCOUNT);
+        var address = getCreditorAddress();
+        var language = getLanguage();
+        var wordTemplate = getProperty(WORD_TEMPLATE);
+        var csvSeparator = getProperty(CSV_SEPARATOR);
+        var nameFormat = getProperty(NAME_FORMAT);
+        var addressLine1Format = getProperty(ADDRESS_LINE1_FORMAT);
+        var addressLine2Format = getProperty(ADDRESS_LINE2_FORMAT);
+        var paymentAmountFormat = getProperty(PAYMENT_AMOUNT_FORMAT);
+        var additionalInfoFormat = getProperty(ADDITIONAL_INFO_FORMAT);
 
         return new Settings(
                 account,
                 address,
                 language,
+                wordTemplate,
                 csvSeparator,
                 nameFormat,
                 addressLine1Format,
@@ -105,6 +108,7 @@ public class SettingsManager {
         setProperty(CREDITOR_ADDRESS_LINE1, settings.address().getAddressLine1());
         setProperty(CREDITOR_ADDRESS_LINE2, settings.address().getAddressLine2());
         setProperty(LANGUAGE, settings.language().name());
+        setProperty(WORD_TEMPLATE, settings.wordTemplate());
         setProperty(CSV_SEPARATOR, settings.csvSeparator());
         setProperty(NAME_FORMAT, settings.nameFormat());
         setProperty(ADDRESS_LINE1_FORMAT, settings.addressLine1Format());

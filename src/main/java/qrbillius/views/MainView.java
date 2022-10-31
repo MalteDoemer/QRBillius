@@ -55,7 +55,8 @@ public class MainView extends ViewController {
 
     private void onItemsChange(ListChangeListener.Change<? extends QRBillInfo> change) {
         // Disable PDF creation if there are no bills
-        exportButton.setDisable(app.getBills().size() == 0);
+        var isEmpty = app.getBills().size() == 0;
+        exportButton.setDisable(isEmpty);
     }
 
     private void onSelectionChange(ListChangeListener.Change<? extends QRBillInfo> change) {
@@ -119,7 +120,6 @@ public class MainView extends ViewController {
             default -> {
                 var error = new ErrorMessage(ErrorConstants.UNSUPPORTED_FILE_EXTENSION, ext);
                 app.showErrorMessage(error);
-
             }
         }
     }

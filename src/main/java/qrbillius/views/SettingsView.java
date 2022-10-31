@@ -3,7 +3,9 @@ package qrbillius.views;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import net.codecrete.qrbill.generator.Language;
+import org.apache.commons.io.FilenameUtils;
 import qrbillius.Application;
 import qrbillius.SettingsManager;
 import qrbillius.errors.ErrorChecker;
@@ -20,6 +22,7 @@ public class SettingsView extends ViewController {
     public TextField addressLine1Field;
     public TextField addressLine2Field;
     public ChoiceBox<Language> languageChoiceBox;
+    public TextField wordTemplateField;
     public TextField csvSeparatorField;
     public TextField importNameFormatField;
     public TextField importAddressLine1FormatField;
@@ -44,6 +47,7 @@ public class SettingsView extends ViewController {
         addressLine1Field.setText(settings.address().getAddressLine1());
         addressLine2Field.setText(settings.address().getAddressLine2());
         languageChoiceBox.getSelectionModel().select(settings.language());
+        wordTemplateField.setText(settings.wordTemplate());
         csvSeparatorField.setText(settings.csvSeparator());
         importNameFormatField.setText(settings.nameFormat());
         importAddressLine1FormatField.setText(settings.addressLine1Format());
@@ -51,6 +55,19 @@ public class SettingsView extends ViewController {
         importPaymentAmountFormatField.setText(settings.paymentAmountFormat());
         importAdditionalInfoFormatField.setText(settings.additionalInfoFormat());
     }
+
+    public void onWordTemplateSelectButtonClick(ActionEvent actionEvent) {
+        var chooser = new FileChooser();
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Word", "*.docx"));
+        var file = chooser.showOpenDialog(app.getStage());
+
+        // file == null means that the user canceled the selection
+        if (file == null)
+            return;
+
+        wordTemplateField.setText(file.getAbsolutePath());
+    }
+
 
     public void onCancelButtonClicked(ActionEvent actionEvent) {
         app.switchView(app.getMainView());
@@ -62,6 +79,7 @@ public class SettingsView extends ViewController {
         settings.setAccount(accountField.getText());
         settings.setAddress(QRBillGenerator.createAddress(nameField.getText(), addressLine1Field.getText(), addressLine2Field.getText()));
         settings.setLanguage(languageChoiceBox.getValue());
+        settings.setWordTemplate(wordTemplateField.getText());
         settings.setCsvSeparator(csvSeparatorField.getText());
         settings.setNameFormat(importNameFormatField.getText());
         settings.setAddressLine1Format(importAddressLine1FormatField.getText());

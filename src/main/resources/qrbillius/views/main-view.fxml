@@ -78,7 +78,7 @@
                 </Button>
                 <Button fx:id="exportButton" mnemonicParsing="false" onAction="#onExportButtonClick">
                     <tooltip>
-                        <Tooltip text="%saveTooltip"/>
+                        <Tooltip text="%exportTooltip"/>
                     </tooltip>
                     <graphic>
                         <FontIcon iconLiteral="fa-download" iconSize="32"/>

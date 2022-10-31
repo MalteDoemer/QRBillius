@@ -9,6 +9,7 @@ public final class Settings {
     private String account;
     private Address address;
     private Language language;
+    private String wordTemplate;
     private String csvSeparator;
     private String nameFormat;
     private String addressLine1Format;
@@ -19,6 +20,7 @@ public final class Settings {
     public Settings(String account,
                     Address address,
                     Language language,
+                    String wordTemplate,
                     String csvSeparator,
                     String nameFormat,
                     String addressLine1Format,
@@ -28,6 +30,7 @@ public final class Settings {
         this.account = account;
         this.address = address;
         this.language = language;
+        this.wordTemplate = wordTemplate;
         this.csvSeparator = csvSeparator;
         this.nameFormat = nameFormat;
         this.addressLine1Format = addressLine1Format;
@@ -47,6 +50,8 @@ public final class Settings {
     public Language language() {
         return language;
     }
+
+    public String wordTemplate() { return wordTemplate; }
 
     public String csvSeparator() {
         return csvSeparator;
@@ -82,6 +87,10 @@ public final class Settings {
 
     public void setLanguage(Language language) {
         this.language = language;
+    }
+
+    public void setWordTemplate(String wordTemplate) {
+        this.wordTemplate = wordTemplate;
     }
 
     public void setCsvSeparator(String csvSeparator) {

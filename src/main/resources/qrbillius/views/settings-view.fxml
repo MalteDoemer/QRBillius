@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0"
             xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="qrbillius.views.SettingsView">
@@ -41,6 +42,17 @@
                             <ChoiceBox fx:id="languageChoiceBox"/>
                         </VBox>
                         <Label styleClass="header-label" text="%importSettingsHeader" />
+                        <VBox spacing="5.0">
+                            <Label text="%wordTemplateField"/>
+                            <HBox>
+                                <TextField fx:id="wordTemplateField"/>
+                                <Button mnemonicParsing="false" onAction="#onWordTemplateSelectButtonClick">
+                                    <graphic>
+                                        <FontIcon iconLiteral="fa-folder-open" iconSize="16"/>
+                                    </graphic>
+                                </Button>
+                            </HBox>
+                        </VBox>
                         <VBox spacing="5.0">
                             <Label text="%csvSeparatorField"/>
                             <TextField fx:id="csvSeparatorField"/>

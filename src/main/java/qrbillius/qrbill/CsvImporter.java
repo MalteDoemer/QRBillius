@@ -20,7 +20,7 @@ public class CsvImporter extends QRBillImporter {
 
     @Override
     public List<QRBillInfo> load(File file) throws IOException, ErrorResultException {
-        try (var records = createParser(file)) {
+        try (var parser = createParser(file)) {
             var bills = new ArrayList<QRBillInfo>();
 
             var nameFormatter = new FormatParser(settings.nameFormat());
@@ -29,7 +29,7 @@ public class CsvImporter extends QRBillImporter {
             var paymentAmountFormatter = new FormatParser(settings.paymentAmountFormat());
             var additionalInfoFormatter = new FormatParser(settings.additionalInfoFormat());
 
-            for (var record : records) {
+            for (var record : parser) {
                 var list = record.toList();
                 try {
                     var name = nameFormatter.parse(list);
@@ -43,14 +43,14 @@ public class CsvImporter extends QRBillImporter {
                     var res = ErrorChecker.checkBillingInformation(billInfo);
 
                     if (res.hasErrors()) {
-                        res.setLineNumber((int) records.getCurrentLineNumber());
+                        res.setLineNumber((int) parser.getCurrentLineNumber());
                         throw new ErrorResultException(res);
                     }
 
                     bills.add(billInfo);
                 } catch (FormatException e) {
                     var res = e.createErrorResult();
-                    res.setLineNumber((int) records.getCurrentLineNumber());
+                    res.setLineNumber((int) parser.getCurrentLineNumber());
                     throw new ErrorResultException(res);
                 }
             }
