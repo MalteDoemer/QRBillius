@@ -2,7 +2,7 @@ package qrbillius.qrbill;
 
 import javafx.beans.property.SimpleStringProperty;
 
-import java.util.Objects;
+import java.util.Map;
 
 public final class QRBillInfo {
     private final SimpleStringProperty name;
@@ -10,13 +10,19 @@ public final class QRBillInfo {
     private final SimpleStringProperty addressLine2;
     private final SimpleStringProperty amount;
     private final SimpleStringProperty additionalInfo;
+    private final Map<String, String> importedValues;
 
     public QRBillInfo(String name, String addressLine1, String addressLine2, String amount, String additionalInfo) {
+        this(name, addressLine1, addressLine2, amount, additionalInfo, null);
+    }
+
+    public QRBillInfo(String name, String addressLine1, String addressLine2, String amount, String additionalInfo, Map<String, String> importedValues) {
         this.name = new SimpleStringProperty(name);
         this.addressLine1 = new SimpleStringProperty(addressLine1);
         this.addressLine2 = new SimpleStringProperty(addressLine2);
         this.amount = new SimpleStringProperty(amount);
         this.additionalInfo = new SimpleStringProperty(additionalInfo);
+        this.importedValues = importedValues;
     }
 
     public String getName() {
@@ -77,5 +83,13 @@ public final class QRBillInfo {
 
     public void setAdditionalInfo(String additionalInfo) {
         this.additionalInfo.set(additionalInfo);
+    }
+
+    public Map<String, String> getImportedValues() {
+        return importedValues;
+    }
+
+    public boolean hasImportedValues() {
+        return importedValues != null;
     }
 }

@@ -40,7 +40,7 @@ public class XlsxImporter extends QRBillImporter {
                 var paymentAmount = paymentAmountFormatter.parse(list);
                 var additionalInfo = additionalInfoFormatter.parse(list);
 
-                var billInfo = new QRBillInfo(name, addressLine1, addressLine2, paymentAmount, additionalInfo);
+                var billInfo = new QRBillInfo(name, addressLine1, addressLine2, paymentAmount, additionalInfo, record.toMap());
 
                 var res = ErrorChecker.checkBillingInformation(billInfo);
 
