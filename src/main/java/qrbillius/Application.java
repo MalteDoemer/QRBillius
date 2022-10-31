@@ -34,8 +34,6 @@ public class Application extends javafx.application.Application {
 
     private ViewInfo addView;
 
-    private ViewInfo docxExportView;
-
     private ViewInfo settingsView;
 
     private Settings settings;
@@ -53,7 +51,6 @@ public class Application extends javafx.application.Application {
 
         mainView = loadView("main-view.fxml");
         addView = loadView("add-view.fxml");
-        docxExportView = loadView("docx-export-view.fxml");
         settingsView = loadView("settings-view.fxml");
 
         stage.setScene(new Scene(mainView.root(), PREF_WIDTH, PREF_HEIGHT));
@@ -163,10 +160,6 @@ public class Application extends javafx.application.Application {
 
     public ViewInfo getAddView() {
         return addView;
-    }
-
-    public ViewInfo getDocxExportView() {
-        return docxExportView;
     }
 
     public ViewInfo getSettingsView() {

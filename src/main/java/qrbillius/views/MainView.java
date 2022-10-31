@@ -115,7 +115,7 @@ public class MainView extends ViewController {
 
         switch (FileExtensions.parse(ext)) {
             case PDF -> exportTo(new PdfExporter(app.getSettings()), file);
-            case DOCX -> app.switchView(app.getDocxExportView(), file.getAbsolutePath());
+            case DOCX -> exportTo(new DocxExporter(app.getSettings()), file);
             default -> {
                 var error = new ErrorMessage(ErrorConstants.UNSUPPORTED_FILE_EXTENSION, ext);
                 app.showErrorMessage(error);
