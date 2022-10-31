@@ -3,8 +3,6 @@ package qrbillius;
 import net.codecrete.qrbill.generator.Address;
 import net.codecrete.qrbill.generator.Language;
 
-import java.util.Objects;
-
 public final class Settings {
     private String account;
     private Address address;

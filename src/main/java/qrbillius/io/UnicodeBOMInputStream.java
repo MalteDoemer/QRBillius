@@ -32,6 +32,7 @@ import java.io.PushbackInputStream;
  * @author Gregory Pakosz
  * @version 1.0
  */
+@SuppressWarnings("ALL")
 public class UnicodeBOMInputStream extends InputStream
 {
     /**

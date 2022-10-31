@@ -17,85 +17,79 @@
     </top>
     <center>
         <ScrollPane BorderPane.alignment="CENTER">
-            <content>
-                <VBox spacing="10.0">
-                    <children>
-                        <Label styleClass="header-label" text="%accountSettingsHeader"/>
-                        <VBox spacing="5.0">
-                            <Label text="%accountField"/>
-                            <TextField fx:id="accountField"/>
-                        </VBox>
-                        <VBox spacing="5.0">
-                            <Label text="%nameField"/>
-                            <TextField fx:id="nameField"/>
-                        </VBox>
-                        <VBox spacing="5.0">
-                            <Label text="%addressLine1Field"/>
-                            <TextField fx:id="addressLine1Field"/>
-                        </VBox>
-                        <VBox spacing="5.0">
-                            <Label text="%addressLine2Field"/>
-                            <TextField fx:id="addressLine2Field"/>
-                        </VBox>
-                        <VBox spacing="5.0">
-                            <Label text="%languageField"/>
-                            <ChoiceBox fx:id="languageChoiceBox"/>
-                        </VBox>
-                        <Label styleClass="header-label" text="%importSettingsHeader" />
-                        <VBox spacing="5.0">
-                            <Label text="%wordTemplateField"/>
-                            <HBox>
-                                <TextField fx:id="wordTemplateField"/>
-                                <Button mnemonicParsing="false" onAction="#onWordTemplateSelectButtonClick">
-                                    <graphic>
-                                        <FontIcon iconLiteral="fa-folder-open" iconSize="16"/>
-                                    </graphic>
-                                </Button>
-                            </HBox>
-                        </VBox>
-                        <VBox spacing="5.0">
-                            <Label text="%csvSeparatorField"/>
-                            <TextField fx:id="csvSeparatorField"/>
-                        </VBox>
-                        <VBox spacing="5.0">
-                            <Label text="%nameFormatField"/>
-                            <TextField fx:id="importNameFormatField"/>
-                        </VBox>
-                        <VBox spacing="5.0">
-                            <Label text="%addressLine1FormatField"/>
-                            <TextField fx:id="importAddressLine1FormatField"/>
-                        </VBox>
-                        <VBox spacing="5.0">
-                            <Label text="%addressLine2FormatField"/>
-                            <TextField fx:id="importAddressLine2FormatField"/>
-                        </VBox>
-                        <VBox spacing="5.0">
-                            <Label text="%paymentAmountFormatField"/>
-                            <TextField fx:id="importPaymentAmountFormatField"/>
-                        </VBox>
-                        <VBox spacing="5.0">
-                            <Label text="%additionalInfoFormatField"/>
-                            <TextField fx:id="importAdditionalInfoFormatField"/>
-                        </VBox>
-                    </children>
-                    <padding>
-                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
-                    </padding>
+            <VBox spacing="10.0">
+                <padding>
+                    <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                </padding>
+                <Label styleClass="header-label" text="%accountSettingsHeader"/>
+                <VBox spacing="5.0">
+                    <Label text="%accountField"/>
+                    <TextField fx:id="accountField"/>
                 </VBox>
-            </content>
+                <VBox spacing="5.0">
+                    <Label text="%nameField"/>
+                    <TextField fx:id="nameField"/>
+                </VBox>
+                <VBox spacing="5.0">
+                    <Label text="%addressLine1Field"/>
+                    <TextField fx:id="addressLine1Field"/>
+                </VBox>
+                <VBox spacing="5.0">
+                    <Label text="%addressLine2Field"/>
+                    <TextField fx:id="addressLine2Field"/>
+                </VBox>
+                <VBox spacing="5.0">
+                    <Label text="%languageField"/>
+                    <ChoiceBox fx:id="languageChoiceBox"/>
+                </VBox>
+                <Label styleClass="header-label" text="%importSettingsHeader"/>
+                <VBox spacing="5.0">
+                    <Label text="%wordTemplateField"/>
+                    <HBox>
+                        <TextField fx:id="wordTemplateField"/>
+                        <Button mnemonicParsing="false" onAction="#onWordTemplateSelectButtonClick">
+                            <graphic>
+                                <FontIcon iconLiteral="fa-folder-open" iconSize="16"/>
+                            </graphic>
+                        </Button>
+                    </HBox>
+                </VBox>
+                <VBox spacing="5.0">
+                    <Label text="%csvSeparatorField"/>
+                    <TextField fx:id="csvSeparatorField"/>
+                </VBox>
+                <VBox spacing="5.0">
+                    <Label text="%nameFormatField"/>
+                    <TextField fx:id="importNameFormatField"/>
+                </VBox>
+                <VBox spacing="5.0">
+                    <Label text="%addressLine1FormatField"/>
+                    <TextField fx:id="importAddressLine1FormatField"/>
+                </VBox>
+                <VBox spacing="5.0">
+                    <Label text="%addressLine2FormatField"/>
+                    <TextField fx:id="importAddressLine2FormatField"/>
+                </VBox>
+                <VBox spacing="5.0">
+                    <Label text="%paymentAmountFormatField"/>
+                    <TextField fx:id="importPaymentAmountFormatField"/>
+                </VBox>
+                <VBox spacing="5.0">
+                    <Label text="%additionalInfoFormatField"/>
+                    <TextField fx:id="importAdditionalInfoFormatField"/>
+                </VBox>
+            </VBox>
         </ScrollPane>
     </center>
     <bottom>
         <HBox alignment="CENTER_RIGHT" spacing="10.0" BorderPane.alignment="CENTER">
-            <children>
-                <Button alignment="CENTER" mnemonicParsing="false" onAction="#onSaveButtonClicked" prefWidth="120.0"
-                        text="%saveButton"/>
-                <Button alignment="CENTER" mnemonicParsing="false" onAction="#onCancelButtonClicked" prefWidth="120.0"
-                        text="%cancelButton"/>
-            </children>
             <padding>
                 <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
             </padding>
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onSaveButtonClicked" prefWidth="120.0"
+                    text="%saveButton"/>
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onCancelButtonClicked" prefWidth="120.0"
+                    text="%cancelButton"/>
         </HBox>
     </bottom>
 </BorderPane>

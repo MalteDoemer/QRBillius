@@ -9,7 +9,6 @@ import org.docx4j.XmlUtils;
 import org.docx4j.jaxb.Context;
 import org.docx4j.model.fields.merge.DataFieldName;
 import org.docx4j.model.fields.merge.MailMerger;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
 import org.docx4j.relationships.Relationship;
@@ -44,7 +43,12 @@ public class DocxExporter extends QRBillExporter {
             addQRBills(merged, actualBills);
 
             merged.save(file);
+        } catch (IOException e) {
+            throw e;
         } catch (Exception e) {
+            if (e.getCause() instanceof IOException)
+                throw (IOException) e.getCause();
+
             throw new RuntimeException(e);
         }
     }
@@ -105,9 +109,7 @@ public class DocxExporter extends QRBillExporter {
                 continue;
 
             var map = new HashMap<DataFieldName, String>();
-            bill.getImportedValues().forEach((key, val) -> {
-                map.put(new DataFieldName(key), val);
-            });
+            bill.getImportedValues().forEach((key, val) -> map.put(new DataFieldName(key), val));
 
             res.add(map);
         }

@@ -5,7 +5,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import net.codecrete.qrbill.generator.Language;
-import org.apache.commons.io.FilenameUtils;
 import qrbillius.Application;
 import qrbillius.SettingsManager;
 import qrbillius.errors.ErrorChecker;

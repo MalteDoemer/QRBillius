@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.List;
 
 public abstract class QRBillExporter {
-    protected Settings settings;
+    protected final Settings settings;
 
     public QRBillExporter(Settings settings) {
         this.settings = settings;
