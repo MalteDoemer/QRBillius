@@ -1,6 +1,5 @@
 package qrbillius;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -52,6 +51,16 @@ public class Application extends javafx.application.Application {
         mainView = loadView("main-view.fxml");
         addView = loadView("add-view.fxml");
         settingsView = loadView("settings-view.fxml");
+
+        Thread.currentThread().setUncaughtExceptionHandler((t, e) -> {
+
+            var cause = e;
+            while (cause.getCause() != null)
+                cause = cause.getCause();
+
+            var message = new ErrorMessage(ErrorConstants.UNHANDLED_EXCEPTION_OCCURRED, cause.getLocalizedMessage());
+            Application.this.showErrorMessage(message);
+        });
 
         stage.setScene(new Scene(mainView.root(), PREF_WIDTH, PREF_HEIGHT));
         stage.getScene().getStylesheets().add(loadStylesheet("style.css"));
@@ -136,7 +145,12 @@ public class Application extends javafx.application.Application {
             text = String.format("%s: %s", lineInfo, text);
         }
 
-        var dialog = new Alert(Alert.AlertType.ERROR, text);
+        var sb = new StringBuilder(text);
+        for (int i = 0; i < text.length(); i += 200) {
+            sb.insert(i, "\n");
+        }
+        var dialog = new Alert(Alert.AlertType.ERROR, sb.toString());
+
         dialog.initOwner(stage.getOwner());
         dialog.showAndWait();
     }
