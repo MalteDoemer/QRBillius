@@ -39,7 +39,7 @@ public class SettingsView extends ViewController {
     }
 
     @Override
-    public void show(Object arg) {
+    public void show() {
         var settings = app.getSettings();
 
         accountField.setText(settings.account());

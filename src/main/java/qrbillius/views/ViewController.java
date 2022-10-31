@@ -5,5 +5,5 @@ import qrbillius.Application;
 public abstract  class ViewController {
     public abstract void init(Application app);
 
-    public abstract void show(Object arg);
+    public abstract void show();
 }

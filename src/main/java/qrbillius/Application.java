@@ -79,12 +79,7 @@ public class Application extends javafx.application.Application {
     }
 
     public void switchView(ViewInfo view) {
-        view.controller().show(null);
-        stage.getScene().setRoot(view.root());
-    }
-
-    public void switchView(ViewInfo view, Object arg) {
-        view.controller().show(arg);
+        view.controller().show();
         stage.getScene().setRoot(view.root());
     }
 

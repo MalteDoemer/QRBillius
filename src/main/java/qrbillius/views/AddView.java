@@ -22,7 +22,7 @@ public class AddView extends ViewController {
     }
 
     @Override
-    public void show(Object arg) {
+    public void show() {
         nameTextField.clear();
         addressLine1TextField.clear();
         addressLine2TextField.clear();

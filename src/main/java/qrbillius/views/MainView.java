@@ -49,7 +49,7 @@ public class MainView extends ViewController {
 
 
     @Override
-    public void show(Object arg) {
+    public void show() {
 
     }
 
