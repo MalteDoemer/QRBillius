@@ -1,3 +1,5 @@
+import org.gradle.internal.os.OperatingSystem
+
 plugins {
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
@@ -64,7 +66,7 @@ runtime {
         imageName = 'QRBillius'
         installerName = 'QRBillius'
 
-        def currentOs = org.gradle.internal.os.OperatingSystem.current()
+        def currentOs = OperatingSystem.current()
         def icon = currentOs.windows ? 'qrbillius.ico' : 'qrbillius-16x16.png'
 
         imageOptions += ['--icon', "src/main/resources/qrbillius/icons/$icon"]
@@ -72,8 +74,6 @@ runtime {
 
         if (currentOs.windows) {
             installerOptions += ['--win-dir-chooser', '--win-menu']
-        } else if (currentOs.linux) {
-            installerOptions += ['--linux-package-name', 'hellofx']
         }
     }
 }
