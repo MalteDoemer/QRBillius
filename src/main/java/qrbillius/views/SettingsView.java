@@ -6,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import net.codecrete.qrbill.generator.Language;
 import qrbillius.Application;
+import qrbillius.Settings;
 import qrbillius.SettingsManager;
 import qrbillius.errors.ErrorChecker;
 import qrbillius.errors.ErrorConstants;
@@ -73,18 +74,8 @@ public class SettingsView extends ViewController {
     }
 
     public void onSaveButtonClicked(ActionEvent actionEvent) {
-        var settings = app.getSettings();
 
-        settings.setAccount(accountField.getText());
-        settings.setAddress(QRBillGenerator.createAddress(nameField.getText(), addressLine1Field.getText(), addressLine2Field.getText()));
-        settings.setLanguage(languageChoiceBox.getValue());
-        settings.setWordTemplate(wordTemplateField.getText());
-        settings.setCsvSeparator(csvSeparatorField.getText());
-        settings.setNameFormat(importNameFormatField.getText());
-        settings.setAddressLine1Format(importAddressLine1FormatField.getText());
-        settings.setAddressLine2Format(importAddressLine2FormatField.getText());
-        settings.setPaymentAmountFormat(importPaymentAmountFormatField.getText());
-        settings.setAdditionalInfoFormat(importAdditionalInfoFormatField.getText());
+        var settings = createSettings();
 
         var result = ErrorChecker.checkSettings(settings);
         if (result.hasErrors()) {
@@ -93,6 +84,7 @@ public class SettingsView extends ViewController {
         }
 
         try {
+            app.setSettings(settings);
             SettingsManager.save(settings);
         } catch (IOException e) {
             e.printStackTrace();
@@ -101,5 +93,20 @@ public class SettingsView extends ViewController {
         }
 
         app.switchView(app.getMainView());
+    }
+
+    private Settings createSettings() {
+        return new Settings(
+            accountField.getText(),
+            QRBillGenerator.createAddress(nameField.getText(), addressLine1Field.getText(), addressLine2Field.getText()),
+            languageChoiceBox.getValue(),
+            wordTemplateField.getText(),
+            csvSeparatorField.getText(),
+            importNameFormatField.getText(),
+            importAddressLine1FormatField.getText(),
+            importAddressLine2FormatField.getText(),
+            importPaymentAmountFormatField.getText(),
+            importAdditionalInfoFormatField.getText()
+        );
     }
 }

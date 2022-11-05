@@ -3,9 +3,13 @@ package qrbillius;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.SpreadsheetMLPackage;
@@ -140,12 +144,16 @@ public class Application extends javafx.application.Application {
             text = String.format("%s: %s", lineInfo, text);
         }
 
-        var sb = new StringBuilder(text);
-        for (int i = 0; i < text.length(); i += 200) {
-            sb.insert(i, "\n");
-        }
-        var dialog = new Alert(Alert.AlertType.ERROR, sb.toString());
+        var dialog = new Alert(Alert.AlertType.ERROR, "");
 
+        var t = new Text(text);
+        t.setWrappingWidth(300);
+
+        var p = new StackPane();
+        StackPane.setMargin(t, new Insets(10, 10, 10, 10));
+        p.getChildren().add(t);
+
+        dialog.getDialogPane().setContent(p);
         dialog.initOwner(stage.getOwner());
         dialog.showAndWait();
     }
@@ -177,6 +185,10 @@ public class Application extends javafx.application.Application {
 
     public Settings getSettings() {
         return settings;
+    }
+
+    public void setSettings(Settings settings) {
+        this.settings = settings;
     }
 
     public ObservableList<QRBillInfo> getBills() {
