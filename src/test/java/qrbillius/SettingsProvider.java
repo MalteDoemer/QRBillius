@@ -1,3 +1,5 @@
+package qrbillius;
+
 import net.codecrete.qrbill.generator.Address;
 import net.codecrete.qrbill.generator.Language;
 import qrbillius.Settings;
