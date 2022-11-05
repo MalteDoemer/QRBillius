@@ -9,6 +9,8 @@ public class ErrorConstants {
 
     public static final String LINE_INFO = "lineInfo";
 
+    public static final String SETTINGS_INVALID = "settingsInvalid";
+
     public static final String ACCOUNT_INVALID = "accountInvalid";
 
     public static final String ACCOUNT_MISSING = "accountMissing";

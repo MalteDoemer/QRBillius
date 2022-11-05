@@ -99,6 +99,17 @@ public class MainView extends ViewController {
     }
 
     public void onExportButtonClick(ActionEvent actionEvent) {
+
+        var res = ErrorChecker.checkSettings(app.getSettings());
+
+        if (res.hasErrors())
+        {
+            var msg = new ErrorMessage(ErrorConstants.SETTINGS_INVALID);
+            app.showErrorMessage(msg);
+            app.switchView(app.getSettingsView());
+            return;
+        }
+
         var chooser = new FileChooser();
         chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter(app.getUiResources().getString("allFileExtensions"), "*.pdf", "*.docx"),
