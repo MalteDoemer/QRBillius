@@ -109,7 +109,10 @@ public class XlsxParser implements Iterable<XlsxRecord> {
                         var index = Integer.parseInt(c.getV());
                         cells.add(sharedStrings.get(index).getT().getValue());
                     } else {
-                        cells.add(c.getV());
+                        if (c.getV() == null)
+                            cells.add("");
+                        else
+                            cells.add(c.getV());
                     }
                 }
 
