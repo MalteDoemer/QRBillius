@@ -9,20 +9,22 @@ import org.docx4j.XmlUtils;
 import org.docx4j.jaxb.Context;
 import org.docx4j.model.fields.merge.DataFieldName;
 import org.docx4j.model.fields.merge.MailMerger;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.BinaryPartAbstractImage;
 import org.docx4j.relationships.Relationship;
 import org.docx4j.wml.Drawing;
 import org.docx4j.wml.P;
 import qrbillius.Settings;
+import qrbillius.errors.ErrorConstants;
+import qrbillius.errors.ErrorMessage;
+import qrbillius.errors.ErrorResult;
+import qrbillius.errors.ErrorResultException;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DocxExporter extends QRBillExporter {
 
@@ -31,19 +33,21 @@ public class DocxExporter extends QRBillExporter {
     }
 
     @Override
-    public void export(File file, List<QRBillInfo> bills) throws IOException {
+    public void export(File file, List<QRBillInfo> bills) throws IOException, ErrorResultException {
         try {
             var wordPackage = loadWordTemplate();
 
-            var actualBills = removeUnmappedBills(bills);
+            var res = verifyWordTemplate(wordPackage);
+            if (res.hasErrors())
+                throw new ErrorResultException(res);
 
-            var mapData = createDataMap(actualBills);
+            var mapData = createDataMap(bills);
             var merged = MailMerger.getConsolidatedResultCrude(wordPackage, mapData, false);
 
-            addQRBills(merged, actualBills);
+            addQRBills(merged, bills);
 
             merged.save(file);
-        } catch (IOException e) {
+        } catch (IOException | ErrorResultException e) {
             throw e;
         } catch (Exception e) {
             if (e.getCause() instanceof IOException)
@@ -53,38 +57,13 @@ public class DocxExporter extends QRBillExporter {
         }
     }
 
-    private ArrayList<QRBillInfo> removeUnmappedBills(List<QRBillInfo> bills) {
-        var list = new ArrayList<QRBillInfo>();
-
-        for (var bill : bills) {
-            if (bill.hasImportedValues())
-                list.add(bill);
-        }
-
-        return list;
-    }
-
     private void addQRBills(WordprocessingMLPackage wordPackage, List<QRBillInfo> bills) throws Exception {
 
         var document = wordPackage.getMainDocumentPart().getContents();
         var body = document.getBody();
         var content = body.getContent();
 
-        var sectPrIndices = new ArrayList<Integer>();
-
-        for (int i = 0; i < content.size(); i++) {
-            Object c = content.get(i);
-            if (c instanceof P) {
-                var ppr = ((P) c).getPPr();
-
-                if (ppr != null) {
-                    var sectPr = ppr.getSectPr();
-                    if (sectPr != null) {
-                        sectPrIndices.add(i);
-                    }
-                }
-            }
-        }
+        var sectPrIndices = getSectPrIndices(content);
 
         for (int i = 0; i < sectPrIndices.size(); i++) {
             var index = sectPrIndices.get(i) + i;
@@ -95,23 +74,45 @@ public class DocxExporter extends QRBillExporter {
 
             if (i == sectPrIndices.size() - 1) {
                 // remove the last page break to avoid an empty page
-                content.remove(index + 1);
+                var toRemove = content.get(index + 1);
+                if (toRemove instanceof P p) {
+                    p.setPPr(null);
+                }
             }
         }
 
+    }
+
+    private static ArrayList<Integer> getSectPrIndices(List<Object> content) {
+        var sectPrIndices = new ArrayList<Integer>();
+
+        for (int i = 0; i < content.size(); i++) {
+            Object c = content.get(i);
+            if (c instanceof P p) {
+                var ppr = p.getPPr();
+
+                if (ppr != null) {
+                    var sectPr = ppr.getSectPr();
+                    if (sectPr != null) {
+                        sectPrIndices.add(i);
+                    }
+                }
+            }
+        }
+        return sectPrIndices;
     }
 
     private List<Map<DataFieldName, String>> createDataMap(List<QRBillInfo> bills) {
         var res = new ArrayList<Map<DataFieldName, String>>();
 
         for (var bill : bills) {
-            if (!bill.hasImportedValues())
-                continue;
-
-            var map = new HashMap<DataFieldName, String>();
-            bill.getImportedValues().forEach((key, val) -> map.put(new DataFieldName(key), val));
-
-            res.add(map);
+            if (!bill.hasImportedValues()) {
+                res.add(Collections.emptyMap());
+            } else {
+                var map = new HashMap<DataFieldName, String>();
+                bill.getImportedValues().forEach((key, val) -> map.put(new DataFieldName(key), val));
+                res.add(map);
+            }
         }
 
         return res;
@@ -125,6 +126,21 @@ public class DocxExporter extends QRBillExporter {
         try (var stream = new FileInputStream(file)) {
             return WordprocessingMLPackage.load(stream);
         }
+    }
+
+    private ErrorResult verifyWordTemplate(WordprocessingMLPackage wordPackage) throws ErrorResultException, Docx4JException {
+        var document = wordPackage.getMainDocumentPart().getContents();
+        var body = document.getBody();
+        var content = body.getContent();
+
+        var res = new ErrorResult();
+
+        var sectPrIndices = getSectPrIndices(content);
+
+        if (sectPrIndices.size() > 0)
+            res.addMessage(ErrorConstants.INVALID_WORD_TEMPLATE, settings.wordTemplate());
+
+        return res;
     }
 
     private byte[] createImageData(QRBillInfo info) {

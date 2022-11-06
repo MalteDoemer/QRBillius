@@ -39,6 +39,8 @@ public class ErrorConstants {
 
     public static final String UNSUPPORTED_FILE_EXTENSION = "unsupportedFileExtension";
 
+    public static final String INVALID_WORD_TEMPLATE = "invalidWordTemplate";
+
     public static final String FORMAT_SPECIFIER_INVALID = "formatSpecifierInvalid";
 
     public static final String FORMAT_SPECIFIER_OUT_OF_BOUNDS = "formatSpecifierOutOfBounds";

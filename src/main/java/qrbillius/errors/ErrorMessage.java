@@ -22,16 +22,16 @@ public class ErrorMessage {
         return messageKey;
     }
 
-    public List<String> getFormatParameters() {
-        return formatParameters != null ? List.of(formatParameters) : null;
-    }
-
     public String getFormattedMessage(ResourceBundle errorResources) {
         assert errorResources.containsKey(getMessageKey());
-        if (getFormatParameters() != null)
+        if (formatParameters != null)
             return String.format(errorResources.getString(getMessageKey()), (Object[]) formatParameters);
         else
             return errorResources.getString(getMessageKey());
+    }
+
+    public String[] getFormatParameters() {
+        return formatParameters;
     }
 
     public boolean hasFormatParameters() {

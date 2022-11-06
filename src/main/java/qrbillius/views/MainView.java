@@ -147,6 +147,8 @@ public class MainView extends ViewController {
             e.printStackTrace();
             var message = new ErrorMessage(ErrorConstants.IO_ERROR_OCCURRED, e.getLocalizedMessage());
             app.showErrorMessage(message);
+        } catch (ErrorResultException e) {
+            app.showErrorResult(e.getResult());
         }
     }
 

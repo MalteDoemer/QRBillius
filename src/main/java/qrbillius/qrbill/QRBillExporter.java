@@ -2,6 +2,7 @@ package qrbillius.qrbill;
 
 
 import qrbillius.Settings;
+import qrbillius.errors.ErrorResultException;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,5 +15,5 @@ public abstract class QRBillExporter {
         this.settings = settings;
     }
 
-    public abstract void export(File file, List<QRBillInfo> bills) throws IOException;
+    public abstract void export(File file, List<QRBillInfo> bills) throws IOException, ErrorResultException;
 }

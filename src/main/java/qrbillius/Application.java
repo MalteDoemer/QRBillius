@@ -107,8 +107,9 @@ public class Application extends javafx.application.Application {
     }
 
     public void showErrorResult(ErrorResult result) {
-        if (!result.hasErrors())
+        if (!result.hasErrors()) {
             return;
+        }
 
         var messages = result.getErrorMessages();
 
