@@ -2,6 +2,7 @@ package qrbillius.config;
 
 import net.codecrete.qrbill.generator.Address;
 import net.codecrete.qrbill.generator.Language;
+import qrbillius.Application;
 import qrbillius.qrbill.QRBillGenerator;
 
 import java.io.File;
@@ -28,15 +29,24 @@ public class ConfigurationManager {
     public final static String PAYMENT_AMOUNT_FORMAT = "PaymentAmountFormat";
     public final static String PAYMENT_AMOUNT_REQUIRED = "PaymentAmountRequired";
     public final static String ADDITIONAL_INFO_FORMAT = "AdditionalInfoFormat";
-
     public final static String ENABLE_PDF_TEMPLATE = "EnablePDFTemplate";
     public final static String PDF_TEMPLATE = "PDFTemplate";
     public final static String OPEN_PDF_WHEN_FINISHED = "OpenPDFWhenFinished";
+
+    public final static String LAST_OPENED_FOLDER = "LastOpenedFolder";
 
     private ConfigurationManager() {
     }
 
     private record PropertiesWrapper(Properties properties) {
+        private ApplicationConfiguration getApplicationConfiguration() {
+            var lastOpenedFolder = getProperty(LAST_OPENED_FOLDER);
+            return new ApplicationConfiguration(lastOpenedFolder);
+        }
+
+        private void setApplicationConfiguration(ApplicationConfiguration config) {
+            setProperty(LAST_OPENED_FOLDER, config.lastOpenedFolder());
+        }
 
         private ExportConfiguration getExportConfiguration() {
             var openPDFWhenFinished = getBooleanProperty(OPEN_PDF_WHEN_FINISHED);
@@ -141,6 +151,22 @@ public class ConfigurationManager {
         }
     }
 
+    /**
+     * Load the application configuration from the config file.
+     */
+    public static ApplicationConfiguration loadApplicationConfiguration() throws IOException {
+        var wrapper = loadPropertiesWrapper();
+        return wrapper.getApplicationConfiguration();
+    }
+
+    /**
+     * Write changes to the application configuration back to the config file.
+     */
+    public static void saveApplicationConfiguration(ApplicationConfiguration config) throws IOException {
+        var wrapper = loadPropertiesWrapper();
+        wrapper.setApplicationConfiguration(config);
+        savePropertiesWrapper(wrapper);
+    }
 
     /**
      * Load the import configuration from the config file.

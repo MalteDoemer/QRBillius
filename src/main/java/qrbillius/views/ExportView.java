@@ -80,6 +80,8 @@ public class ExportView extends ViewController {
         }
 
         try {
+            var exportConfig = app.getExportConfiguration();
+
             var profileConfig = app.getProfileConfiguration();
             var res = ErrorChecker.checkProfileConfig(profileConfig);
 
@@ -93,13 +95,17 @@ public class ExportView extends ViewController {
             var chooser = new FileChooser();
             chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
 
+            if (app.getLastOpenedFolder() != null) {
+                chooser.setInitialDirectory(app.getLastOpenedFolder());
+            }
+
             var file = chooser.showSaveDialog(app.getStage());
 
             // file == null means that the user canceled the selection
             if (file == null)
                 return;
 
-            var exportConfig = app.getExportConfiguration();
+            app.setLastedOpenedFolder(file.getParentFile());
 
             var exporter = new QRBillExporter(exportConfig, profileConfig);
             exporter.export(file, app.getBills());
@@ -124,11 +130,18 @@ public class ExportView extends ViewController {
     public void onPDFTemplateSelectButtonClick(ActionEvent actionEvent) {
         var chooser = new FileChooser();
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
+
+        if (app.getLastOpenedFolder() != null) {
+            chooser.setInitialDirectory(app.getLastOpenedFolder());
+        }
+
         var file = chooser.showOpenDialog(app.getStage());
 
         // file == null means that the user canceled the selection
         if (file == null)
             return;
+
+        app.setLastedOpenedFolder(file.getParentFile());
 
         pdfTemplateField.setText(file.getAbsolutePath());
     }

@@ -68,7 +68,6 @@ public class MainView extends ViewController {
     }
 
     public void onImportButtonClick(ActionEvent actionEvent) {
-        // TODO: remember where the user last opened
         var chooser = new FileChooser();
         chooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter(app.getUiResources().getString("allFileExtensions"), "*.csv", "*.xlsx"),
@@ -76,11 +75,20 @@ public class MainView extends ViewController {
                 new FileChooser.ExtensionFilter("Excel", "*.xlsx")
         );
 
+        // open the file chooser at the last used location
+        if (app.getLastOpenedFolder() != null) {
+            chooser.setInitialDirectory(app.getLastOpenedFolder());
+        }
+
+        // display the file chooser dialog
         var file = chooser.showOpenDialog(app.getStage());
 
         // file == null means that the user canceled the selection
         if (file == null)
             return;
+
+        // store the last opened folder
+        app.setLastedOpenedFolder(file.getParentFile());
 
         // this is a little ugly, but we have to somehow pass along
         // the file that was selected ...
