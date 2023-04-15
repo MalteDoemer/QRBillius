@@ -1,0 +1,29 @@
+
+
+.root {
+    -fx-focus-color: -fx-base;
+}
+
+.button {
+    -fx-background-color: -fx-background;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.button:focused {
+    -fx-background-color: -fx-focus-color, -fx-background;
+    -fx-background-insets: -1.4, 0;
+}
+
+.button:hover {
+    -fx-background-color: -fx-base;
+}
+
+.button:armed {
+    -fx-background-color: -fx-pressed-base;
+}
+
+.header-label {
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+}

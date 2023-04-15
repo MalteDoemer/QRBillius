@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="qrbillius.views.AddView">
+    <top>
+        <Label styleClass="header-label" text="%addViewHeader" BorderPane.alignment="TOP_LEFT">
+            <BorderPane.margin>
+                <Insets left="20.0" top="10.0"/>
+            </BorderPane.margin>
+        </Label>
+    </top>
+    <center>
+        <ScrollPane BorderPane.alignment="CENTER">
+            <VBox spacing="10.0">
+                <padding>
+                    <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+                </padding>
+                <VBox spacing="5.0">
+                    <Label text="%nameField"/>
+                    <TextField fx:id="nameTextField"/>
+                </VBox>
+                <VBox spacing="5.0">
+                    <Label text="%addressLine1Field"/>
+                    <TextField fx:id="addressLine1TextField"/>
+                </VBox>
+                <VBox spacing="5.0">
+                    <Label text="%addressLine2Field"/>
+                    <TextField fx:id="addressLine2TextField"/>
+                </VBox>
+                <VBox spacing="5.0">
+                    <Label text="%paymentAmountField"/>
+                    <TextField fx:id="paymentAmountTextField"/>
+                </VBox>
+                <VBox spacing="5.0">
+                    <Label text="%additionalInfoField"/>
+                    <TextField fx:id="additionalInfoTextField"/>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="10.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="10.0" left="20.0" right="20.0" top="10.0"/>
+            </padding>
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onAddButtonClick" prefWidth="120.0"
+                    text="%addButton"/>
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onCancelButtonClick" prefWidth="120.0"
+                    text="%cancelButton"/>
+        </HBox>
+    </bottom>
+</BorderPane>
