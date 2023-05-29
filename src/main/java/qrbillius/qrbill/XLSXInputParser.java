@@ -81,10 +81,18 @@ public class XLSXInputParser implements InputParser {
             currentRow++;
 
             List<String> result = new ArrayList<>();
-            row.forEach(cell -> result.add(cell.getValue().toString()));
+            row.forEach(cell -> {
+                var value = cell.getValue();
+                var text = value == null ? "" : value.toString();
+                result.add(text);
+            });
+
+            // TODO: if every cell is empty or whitespace only we could theoretically skip it.
+            if (result.stream().allMatch(String::isBlank) && hasNext()) {
+                System.out.printf("Note: row number %d is empty and could be skipped.", currentRow);
+            }
+
             return result;
         }
     }
-
-
 }
