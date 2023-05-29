@@ -10,10 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import qrbillius.config.ConfigurationManager;
-import qrbillius.config.ExportConfiguration;
-import qrbillius.config.ImportConfiguration;
-import qrbillius.config.ProfileConfiguration;
+import qrbillius.config.*;
 import qrbillius.errors.ErrorConstants;
 import qrbillius.errors.ErrorMessage;
 import qrbillius.errors.ErrorResult;
@@ -21,6 +18,7 @@ import qrbillius.qrbill.QRBillInfo;
 import qrbillius.views.ViewController;
 import qrbillius.views.ViewInfo;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
@@ -34,10 +32,9 @@ public class Application extends javafx.application.Application {
     private ResourceBundle uiResources;
     private ResourceBundle errorResources;
 
+    private ApplicationConfiguration applicationConfiguration;
     private ImportConfiguration importConfiguration;
-
     private ExportConfiguration exportConfiguration;
-
     private ProfileConfiguration profileConfiguration;
 
     private ViewInfo mainView;
@@ -56,6 +53,7 @@ public class Application extends javafx.application.Application {
         uiResources = loadBundle("UI");
         errorResources = loadBundle("ErrorMessages");
 
+        applicationConfiguration = ConfigurationManager.loadApplicationConfiguration();
         importConfiguration = ConfigurationManager.loadImportConfiguration();
         exportConfiguration = ConfigurationManager.loadExportConfiguration();
         profileConfiguration = ConfigurationManager.loadProfileConfiguration();
@@ -182,6 +180,24 @@ public class Application extends javafx.application.Application {
         displayErrorText(text, lineNumber);
     }
 
+    /**
+     * If it exists, return the lasted opened folder.
+     * Otherwise, null.
+     */
+    public File getLastOpenedFolder() {
+        var folder = new File(applicationConfiguration.lastOpenedFolder());
+        return folder.exists() ? folder : null;
+    }
+
+    /**
+     * Stores the last opened folder if it is not null.
+     */
+    public void setLastedOpenedFolder(File folder) {
+        if (folder != null) {
+            var config = new ApplicationConfiguration(folder.getAbsolutePath());
+            setApplicationConfiguration(config);
+        }
+    }
 
     public Stage getStage() {
         return stage;
@@ -193,6 +209,19 @@ public class Application extends javafx.application.Application {
 
     public ResourceBundle getErrorResources() {
         return errorResources;
+    }
+
+    public ApplicationConfiguration getApplicationConfiguration() {
+        return applicationConfiguration;
+    }
+
+    public void setApplicationConfiguration(ApplicationConfiguration applicationConfiguration) {
+        this.applicationConfiguration = applicationConfiguration;
+        try {
+            ConfigurationManager.saveApplicationConfiguration(applicationConfiguration);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public ImportConfiguration getImportConfiguration() {
