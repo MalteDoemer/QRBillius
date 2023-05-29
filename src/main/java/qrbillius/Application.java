@@ -109,7 +109,13 @@ public class Application extends javafx.application.Application {
     private void displayErrorText(String text, int lineNumber) {
         if (lineNumber != ErrorResult.NO_LINE_NUMBER) {
             var lineInfo = String.format(errorResources.getString(ErrorConstants.LINE_INFO), lineNumber);
-            text = String.format("%s: %s", lineInfo, text);
+
+            // insert a newline if the error text spans over multiple lines.
+            if (text.lines().count() > 1) {
+                text = String.format("%s: \n%s", lineInfo, text);
+            } else {
+                text = String.format("%s: %s", lineInfo, text);
+            }
         }
 
         var dialog = new Alert(Alert.AlertType.ERROR, "");
