@@ -48,6 +48,10 @@
                     <TextField fx:id="additionalInfoFormatField"/>
                 </VBox>
                 <VBox spacing="5.0">
+                    <Label text="%worksheetField"/>
+                    <ChoiceBox fx:id="worksheetChoiceBox"/>
+                </VBox>
+                <VBox spacing="5.0">
                     <Label text="%csvSeparatorField"/>
                     <TextField fx:id="csvSeparatorField"/>
                 </VBox>

@@ -14,15 +14,18 @@ public class XLSXInputParser implements InputParser {
 
     private final Workbook workbook;
 
+    private final String selectedWorksheet;
+
     private RowIterator rowIterator;
 
-    private XLSXInputParser(Workbook workbook) {
+    private XLSXInputParser(Workbook workbook, String selectedWorksheet) {
         this.workbook = workbook;
+        this.selectedWorksheet = selectedWorksheet;
     }
 
-    public static InputParser create(File file) throws Exception {
+    public static InputParser create(File file, String selectedWorksheet) throws Exception {
         var workbook = Workbook.load(new FileInputStream(file));
-        return new XLSXInputParser(workbook);
+        return new XLSXInputParser(workbook, selectedWorksheet);
     }
 
     @Override
@@ -40,8 +43,13 @@ public class XLSXInputParser implements InputParser {
 
     @Override
     public Iterator<List<String>> iterator() {
-        // TODO: figure out what the correct worksheet is or let the user select one
-        var sheet = workbook.getWorksheet(0);
+        Worksheet sheet;
+
+        if (selectedWorksheet != null) {
+            sheet = workbook.getWorksheet(selectedWorksheet);
+        } else {
+            sheet = workbook.getCurrentWorksheet();
+        }
 
         var startRow = sheet.getFirstDataRowNumber();
         var endRow = sheet.getLastDataRowNumber();

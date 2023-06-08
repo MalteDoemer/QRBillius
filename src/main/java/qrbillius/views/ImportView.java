@@ -1,12 +1,16 @@
 package qrbillius.views;
 
+import ch.rabanti.nanoxlsx4j.Workbook;
+import ch.rabanti.nanoxlsx4j.Worksheet;
+import ch.rabanti.nanoxlsx4j.exceptions.IOException;
+import ch.rabanti.nanoxlsx4j.lowLevel.XlsxReader;
 import javafx.event.ActionEvent;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.apache.commons.io.FilenameUtils;
 import qrbillius.Application;
-import qrbillius.config.ConfigurationManager;
 import qrbillius.config.ImportConfiguration;
 import qrbillius.errors.*;
 import qrbillius.io.FileExtensions;
@@ -16,7 +20,7 @@ import qrbillius.qrbill.QRBillImporter;
 import qrbillius.qrbill.XLSXInputParser;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileInputStream;
 
 public class ImportView extends ViewController {
 
@@ -28,6 +32,7 @@ public class ImportView extends ViewController {
     public TextField paymentAmountFormatField;
     public CheckBox paymentAmountRequiredCheckBox;
     public TextField additionalInfoFormatField;
+    public ChoiceBox<String> worksheetChoiceBox;
     public TextField csvSeparatorField;
     public Label importHeaderLabel;
     private File file;
@@ -42,6 +47,7 @@ public class ImportView extends ViewController {
         setImportHeaderLabelText();
         configureCSVSeparatorField();
         populateFieldsFromConfig();
+        populateWorksheetChoiceBox();
     }
 
     private void setImportHeaderLabelText() {
@@ -57,6 +63,38 @@ public class ImportView extends ViewController {
         var ext = FilenameUtils.getExtension(file.getName());
         var parsed = FileExtensions.parse(ext);
         csvSeparatorField.setDisable(parsed != FileExtensions.CSV);
+    }
+
+    /**
+     * Fills out the worksheet choice box by opening the xlsx file (if it exists)
+     * and then getting the names for the worksheets.
+     * <p>
+     * This function also disables the choice box if the file is not a xlsx file.
+     */
+    private void populateWorksheetChoiceBox() {
+        worksheetChoiceBox.getItems().clear();
+
+        var ext = FilenameUtils.getExtension(file.getName());
+        var parsed = FileExtensions.parse(ext);
+
+
+        if (parsed == FileExtensions.XLSX) {
+            try {
+                var workbook = Workbook.load(new FileInputStream(file));
+                var worksheets = workbook.getWorksheets().stream().map(Worksheet::getSheetName).toList();
+                worksheetChoiceBox.getItems().addAll(worksheets);
+
+                // make the first item selected
+                if (worksheets.size() > 0) {
+                    worksheetChoiceBox.setValue(worksheets.get(0));
+                }
+            } catch (IOException | java.io.IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            worksheetChoiceBox.setDisable(true);
+        }
+
     }
 
     private void populateFieldsFromConfig() {
@@ -127,7 +165,8 @@ public class ImportView extends ViewController {
                 return CSVInputParser.create(file, csvSeparatorField.getText());
             }
             case XLSX -> {
-                return XLSXInputParser.create(file);
+                var worksheetName = worksheetChoiceBox.getValue();
+                return XLSXInputParser.create(file, worksheetName);
             }
             default -> {
                 var result = new ErrorResult();
