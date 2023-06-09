@@ -5,10 +5,9 @@ import ch.rabanti.nanoxlsx4j.Worksheet;
 import ch.rabanti.nanoxlsx4j.exceptions.IOException;
 import ch.rabanti.nanoxlsx4j.lowLevel.XlsxReader;
 import javafx.event.ActionEvent;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import org.apache.commons.io.FilenameUtils;
 import qrbillius.Application;
 import qrbillius.config.ImportConfiguration;
@@ -24,8 +23,6 @@ import java.io.FileInputStream;
 
 public class ImportView extends ViewController {
 
-    Application app;
-
     public TextField nameFormatField;
     public TextField addressLine1FormatField;
     public TextField addressLine2FormatField;
@@ -35,15 +32,18 @@ public class ImportView extends ViewController {
     public ChoiceBox<String> worksheetChoiceBox;
     public TextField csvSeparatorField;
     public Label importHeaderLabel;
+    public Button cancelButton;
     private File file;
 
     @Override
     public void init(Application app) {
-        this.app = app;
+        super.init(app);
+        keyboardShortcuts.put(new KeyCodeCombination(KeyCode.ESCAPE), () -> cancelButton.fire());
     }
 
     @Override
     public void show() {
+        super.show();
         setImportHeaderLabelText();
         configureCSVSeparatorField();
         populateFieldsFromConfig();

@@ -5,6 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.stage.FileChooser;
 import qrbillius.Application;
 import qrbillius.config.ExportConfiguration;
@@ -21,16 +23,18 @@ public class ExportView extends ViewController {
     public TextField pdfTemplateField;
     public CheckBox pdfTemplateCheckBox;
     public Button pdfTemplateSelectButton;
-    private Application app;
+    public Button cancelButton;
 
     @Override
     public void init(Application app) {
-        this.app = app;
+        super.init(app);
         pdfTemplateCheckBox.selectedProperty().addListener(this::onPDFTemplateCheckBoxChanged);
+        keyboardShortcuts.put(new KeyCodeCombination(KeyCode.ESCAPE), () -> cancelButton.fire());
     }
 
     @Override
     public void show() {
+        super.show();
         populateFieldsFromConfig();
         updatePDFTemplateFields();
     }

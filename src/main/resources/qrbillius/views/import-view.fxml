@@ -65,7 +65,7 @@
             </padding>
             <Button alignment="CENTER" mnemonicParsing="false" onAction="#onImportButtonClicked" prefWidth="120.0"
                     text="%importButton"/>
-            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onCancelButtonClicked" prefWidth="120.0"
+            <Button fx:id="cancelButton" alignment="CENTER" mnemonicParsing="false" onAction="#onCancelButtonClicked" prefWidth="120.0"
                     text="%cancelButton"/>
         </HBox>
     </bottom>

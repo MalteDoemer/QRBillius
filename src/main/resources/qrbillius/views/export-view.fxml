@@ -52,7 +52,7 @@
             </padding>
             <Button alignment="CENTER" mnemonicParsing="false" onAction="#onExportButtonClicked" prefWidth="120.0"
                     text="%exportButton"/>
-            <Button alignment="CENTER" mnemonicParsing="false" onAction="#onCancelButtonClicked" prefWidth="120.0"
+            <Button fx:id="cancelButton" alignment="CENTER" mnemonicParsing="false" onAction="#onCancelButtonClicked" prefWidth="120.0"
                     text="%cancelButton"/>
         </HBox>
     </bottom>

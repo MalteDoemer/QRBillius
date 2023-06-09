@@ -43,6 +43,8 @@ public class Application extends javafx.application.Application {
     private ViewInfo exportView;
     private ViewInfo configView;
 
+    private ViewInfo activeView;
+
 
     private final ObservableList<QRBillInfo> bills = FXCollections.observableArrayList();
 
@@ -69,6 +71,10 @@ public class Application extends javafx.application.Application {
         stage.setScene(new Scene(mainView.root(), PREF_WIDTH, PREF_HEIGHT));
         stage.getScene().getStylesheets().add(loadStylesheet("style.css"));
         stage.setTitle(uiResources.getString("title"));
+
+        activeView = mainView;
+        mainView.controller().show();
+
         stage.show();
     }
 
@@ -134,7 +140,9 @@ public class Application extends javafx.application.Application {
      * Switch the application to the provided view.
      */
     public void switchView(ViewInfo view) {
+        activeView.controller().hide();
         view.controller().show();
+        activeView = view;
         stage.getScene().setRoot(view.root());
     }
 

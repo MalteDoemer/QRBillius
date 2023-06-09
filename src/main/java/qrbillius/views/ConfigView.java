@@ -1,8 +1,11 @@
 package qrbillius.views;
 
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import net.codecrete.qrbill.generator.Language;
 import qrbillius.Application;
 import qrbillius.config.ConfigurationManager;
@@ -15,21 +18,23 @@ import qrbillius.qrbill.QRBillGenerator;
 import java.io.IOException;
 
 public class ConfigView extends ViewController {
-    private Application app;
     public TextField accountField;
     public TextField nameField;
     public TextField addressLine1Field;
     public TextField addressLine2Field;
     public ChoiceBox<Language> languageChoiceBox;
+    public Button cancelButton;
 
     @Override
     public void init(Application app) {
-        this.app = app;
+        super.init(app);
         languageChoiceBox.getItems().addAll(Language.values());
+        keyboardShortcuts.put(new KeyCodeCombination(KeyCode.ESCAPE), () -> cancelButton.fire());
     }
 
     @Override
     public void show() {
+        super.show();
         populateFieldsFromConfig();
     }
 

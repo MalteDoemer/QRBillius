@@ -51,7 +51,7 @@
       <BorderPane.margin>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
       </BorderPane.margin>
-      <Button mnemonicParsing="false" onAction="#onImportButtonClick">
+      <Button mnemonicParsing="false" onAction="#onImportButtonClick" fx:id="importButton">
         <tooltip>
           <Tooltip text="%importTooltip"/>
         </tooltip>
@@ -59,7 +59,7 @@
           <FontIcon iconLiteral="fa-folder-open" iconSize="32"/>
         </graphic>
       </Button>
-      <Button mnemonicParsing="false" onAction="#onAddButtonClick">
+      <Button mnemonicParsing="false" onAction="#onAddButtonClick" fx:id="addButton">
         <tooltip>
           <Tooltip text="%addTooltip"/>
         </tooltip>
@@ -67,7 +67,7 @@
           <FontIcon iconLiteral="fa-plus-circle" iconSize="32"/>
         </graphic>
       </Button>
-      <Button fx:id="removeButton" disable="true" mnemonicParsing="false" onAction="#onRemoveButtonClick">
+      <Button disable="true" mnemonicParsing="false" onAction="#onRemoveButtonClick" fx:id="removeButton">
         <tooltip>
           <Tooltip text="%removeTooltip"/>
         </tooltip>
@@ -75,7 +75,7 @@
           <FontIcon disable="true" iconLiteral="fa-minus-circle" iconSize="32"/>
         </graphic>
       </Button>
-      <Button fx:id="exportButton" mnemonicParsing="false" onAction="#onExportButtonClick">
+      <Button mnemonicParsing="false" onAction="#onExportButtonClick" fx:id="exportButton">
         <tooltip>
           <Tooltip text="%exportTooltip"/>
         </tooltip>
@@ -83,7 +83,7 @@
           <FontIcon iconLiteral="fa-download" iconSize="32"/>
         </graphic>
       </Button>
-      <Button mnemonicParsing="false" onAction="#onConfigButtonClick">
+      <Button mnemonicParsing="false" onAction="#onConfigButtonClick" fx:id="configButton">
         <tooltip>
           <Tooltip text="%settingsTooltip"/>
         </tooltip>

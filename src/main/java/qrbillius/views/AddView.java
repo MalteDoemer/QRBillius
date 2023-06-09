@@ -1,27 +1,35 @@
 package qrbillius.views;
 
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import qrbillius.Application;
 import qrbillius.errors.ErrorChecker;
 import qrbillius.qrbill.QRBillInfo;
 
-public class AddView extends ViewController {
-    private Application app;
+import java.util.Map;
 
+public class AddView extends ViewController {
     public TextField nameTextField;
     public TextField addressLine1TextField;
     public TextField addressLine2TextField;
     public TextField paymentAmountTextField;
     public TextField additionalInfoTextField;
+    public Button cancelButton;
 
     @Override
     public void init(Application app) {
-        this.app = app;
+        super.init(app);
+
+        keyboardShortcuts.put(new KeyCodeCombination(KeyCode.ESCAPE), () -> cancelButton.fire());
     }
 
     @Override
     public void show() {
+        super.show();
         nameTextField.clear();
         addressLine1TextField.clear();
         addressLine2TextField.clear();

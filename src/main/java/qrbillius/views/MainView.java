@@ -3,33 +3,42 @@ package qrbillius.views;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import qrbillius.Application;
 import qrbillius.qrbill.QRBillInfo;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainView extends ViewController {
-    private Application app;
     public TableView<QRBillInfo> tableView;
+    public Button importButton;
+    public Button addButton;
     public Button removeButton;
     public Button exportButton;
+    public Button configButton;
 
     @Override
     public void init(Application app) {
-        this.app = app;
+        super.init(app);
 
         tableView.setItems(app.getBills());
         tableView.getItems().addListener(this::onItemsChange);
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableView.getSelectionModel().getSelectedItems().addListener(this::onSelectionChange);
 
+        keyboardShortcuts.put(new KeyCodeCombination(KeyCode.O, KeyCodeCombination.SHORTCUT_DOWN), () -> importButton.fire());
+        keyboardShortcuts.put(new KeyCodeCombination(KeyCode.N, KeyCodeCombination.SHORTCUT_DOWN), () -> addButton.fire());
+        keyboardShortcuts.put(new KeyCodeCombination(KeyCode.DELETE), () -> removeButton.fire());
+        keyboardShortcuts.put(new KeyCodeCombination(KeyCode.S, KeyCodeCombination.SHORTCUT_DOWN), () -> exportButton.fire());
+        keyboardShortcuts.put(new KeyCodeCombination(KeyCode.X, KeyCodeCombination.SHORTCUT_DOWN), () -> configButton.fire());
+
         setTableViewRowFactory();
         configureExportButton();
-    }
-
-    @Override
-    public void show() {
-
     }
 
     /**
