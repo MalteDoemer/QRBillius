@@ -24,8 +24,8 @@ import java.util.ResourceBundle;
 
 public class Application extends javafx.application.Application {
 
-    private static final int PREF_WIDTH = 800;
-    private static final int PREF_HEIGHT = 500;
+    private static final int PREF_WIDTH = 900;
+    private static final int PREF_HEIGHT = 600;
 
     private Stage stage;
 
