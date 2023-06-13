@@ -1913,11 +1913,11 @@ public class Worksheet {
 			return nonEmptyCells.stream().filter(x -> x.getValue().toString() != "").max(Comparator.comparingInt(Cell::getRowNumber)).get().getRowNumber();
 		}
 		else if (min) {
-			return nonEmptyCells.stream().filter(x -> x.getValue().toString() != "").max(Comparator.comparingInt(Cell::getColumnNumber)).get()
+			return nonEmptyCells.stream().filter(x -> x.getValue().toString() != "").min(Comparator.comparingInt(Cell::getColumnNumber)).get()
 					.getColumnNumber();
 		}
 		else {
-			return nonEmptyCells.stream().filter(x -> x.getValue().toString() != "").min(Comparator.comparingInt(Cell::getColumnNumber)).get()
+			return nonEmptyCells.stream().filter(x -> x.getValue().toString() != "").max(Comparator.comparingInt(Cell::getColumnNumber)).get()
 					.getColumnNumber();
 		}
 	}
