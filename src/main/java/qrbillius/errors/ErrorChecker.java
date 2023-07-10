@@ -32,10 +32,13 @@ public class ErrorChecker {
         return checker.getResult();
     }
 
-    public static ErrorResult checkImportConfig(ImportConfiguration config) {
+    public static ErrorResult checkImportConfig(ImportConfiguration config, boolean isCSVFile) {
         var checker = new ErrorChecker();
 
-        checker.checkCSVSeparator(config.csvSeparator());
+        // only verify the csv separator if a csv file is imported because otherwise the user cannot change the field.
+        if (isCSVFile) {
+            checker.checkCSVSeparator(config.csvSeparator());
+        }
 
         return checker.getResult();
     }

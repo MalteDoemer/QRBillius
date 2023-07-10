@@ -3,7 +3,6 @@ package qrbillius.views;
 import ch.rabanti.nanoxlsx4j.Workbook;
 import ch.rabanti.nanoxlsx4j.Worksheet;
 import ch.rabanti.nanoxlsx4j.exceptions.IOException;
-import ch.rabanti.nanoxlsx4j.lowLevel.XlsxReader;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -34,6 +33,7 @@ public class ImportView extends ViewController {
     public Label importHeaderLabel;
     public Button cancelButton;
     private File file;
+    private boolean isCSVFile;
 
     @Override
     public void init(Application app) {
@@ -62,7 +62,8 @@ public class ImportView extends ViewController {
     private void configureCSVSeparatorField() {
         var ext = FilenameUtils.getExtension(file.getName());
         var parsed = FileExtensions.parse(ext);
-        csvSeparatorField.setDisable(parsed != FileExtensions.CSV);
+        isCSVFile = parsed == FileExtensions.CSV;
+        csvSeparatorField.setDisable(!isCSVFile);
     }
 
     /**
@@ -110,7 +111,7 @@ public class ImportView extends ViewController {
 
     private boolean saveFieldsToConfig() {
         var config = createImportConfig();
-        var result = ErrorChecker.checkImportConfig(config);
+        var result = ErrorChecker.checkImportConfig(config, isCSVFile);
 
         if (result.hasErrors()) {
             app.showErrorResult(result);
