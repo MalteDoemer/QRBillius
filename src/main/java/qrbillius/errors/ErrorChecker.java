@@ -9,8 +9,6 @@ import qrbillius.qrbill.QRBillGenerator;
 import qrbillius.qrbill.QRBillInfo;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 
@@ -116,12 +114,12 @@ public class ErrorChecker {
 
     private void checkPaymentAmount(String paymentAmount, boolean required) {
         try {
-            var amount = QRBillGenerator.parsePaymentAmount(paymentAmount);
+            var amount = QRBillGenerator.parsePaymentAmountWithoutZero(paymentAmount);
 
             // amount may be optional
             if (amount == null) {
                 if (required)
-                    result.addMessage(ErrorConstants.PAYMENT_AMOUNT_MISSING);
+                    result.addMessage(ErrorConstants.PAYMENT_AMOUNT_MISSING_OR_ZERO);
                 return;
             }
 

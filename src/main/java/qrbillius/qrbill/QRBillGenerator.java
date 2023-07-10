@@ -38,7 +38,7 @@ public class QRBillGenerator {
         bill.getFormat().setOutputSize(outputSize);
 
         // Amount
-        bill.setAmount(parsePaymentAmount(info.getAmount()));
+        bill.setAmount(parsePaymentAmountWithoutZero(info.getAmount()));
         bill.setCurrency("CHF");
 
         // Debtor
@@ -71,6 +71,15 @@ public class QRBillGenerator {
         }
 
         return new BigDecimal(str);
+    }
+
+
+    /**
+     * Same as parsePaymentAmount but replaces an amount of 0.00 with null.
+     */
+    public static BigDecimal parsePaymentAmountWithoutZero(String amount) {
+        var value = parsePaymentAmount(amount);
+        return value.compareTo(BigDecimal.ZERO) == 0 ? null : value;
     }
 
     /**

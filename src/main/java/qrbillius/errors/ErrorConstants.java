@@ -22,7 +22,8 @@ public class ErrorConstants {
 
     public static final String PAYMENT_AMOUNT_OUTSIDE_VALID_RANGE = "paymentAmountOutsideValidRange";
 
-    public static final String PAYMENT_AMOUNT_MISSING = "paymentAmountMissing";
+    public static final String PAYMENT_AMOUNT_MISSING_OR_ZERO = "paymentAmountMissingOrZero";
+
     public static final String ADDITIONAL_INFO_TOO_LONG = "additionalInfoTooLong";
 
     public static final String NAME_FIELD_TOO_LONG = "nameFieldTooLong";
